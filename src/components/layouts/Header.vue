@@ -1,73 +1,32 @@
 <template>
-  <div>
+  <div id="header">
     <v-navigation-drawer v-model="drawer" app temporary>
       <v-list dense>
-        <v-list-item link to="/">
+        <v-list-item
+          v-for="(item, index) in menu"
+          :key="index"
+          link
+          :to="item.path"
+          @click="setActiveTitle(item.title)"
+        >
           <v-list-item-action>
-            <v-icon>mdi-home-circle</v-icon>
+            <v-icon>{{item.icon}}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>หน้าหลัก</v-list-item-title>
+            <v-list-item-title>{{item.title}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-
-        <v-list-item  to="/about">
-          <v-list-item-action>
-            <v-icon>mdi-clock-alert</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>แจ้งเตือน</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item  to="/about">
-          <v-list-item-action>
-            <v-icon>mdi-clipboard-text</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>สัญญาเช่า</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item  to="/about">
-          <v-list-item-action>
-            <v-icon>mdi-google-maps</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>ที่ดิน</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item  to="/about">
-          <v-list-item-action>
-            <v-icon>mdi-flash</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>ไฟฟ้า</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item  to="/about">
-          <v-list-item-action>
-            <v-icon>mdi-water-pump</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>น้ำประปา</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
       </v-list>
     </v-navigation-drawer>
 
     <v-app-bar app clipped-left>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title>Application</v-toolbar-title>
+      <v-toolbar-title>{{activeTitle}}</v-toolbar-title>
     </v-app-bar>
   </div>
 </template>
 
 <script>
-
 // https://cdn.materialdesignicons.com/2.0.46/
 
 export default {
@@ -75,13 +34,75 @@ export default {
     source: String
   },
   data: () => ({
-    drawer: false
+    drawer: false,
+    activeTitle: "Application",
+    menu: [
+      {
+        path: "/",
+        icon: "mdi-home-circle",
+        title: "หน้าหลัก"
+      },
+      {
+        path: "/tenant",
+        icon: "mdi-account",
+        title: "ผู้เช่า"
+      },
+      {
+        path: "/alert",
+        icon: "mdi-clock-alert",
+        title: "แจ้งเตือน"
+      },
+      {
+        path: "/manege",
+        icon: "mdi-calculator",
+        title: "การจัดการ"
+      },
+      {
+        path: "/contract",
+        icon: "mdi-clipboard-text",
+        title: "สัญญาเช่า"
+      },
+      {
+        path: "/land",
+        icon: "mdi-google-maps",
+        title: "ที่ดิน"
+      },
+      {
+        path: "/electronic",
+        icon: "mdi-flash",
+        title: "ไฟฟ้า"
+      },
+      {
+        path: "/water",
+        icon: "mdi-water-pump",
+        title: "น้ำประปา"
+      },
+      {
+        path: "/bill",
+        icon: "mdi-file-document",
+        title: "ใบเสร็จ"
+      }
+    ]
   }),
-  updated() {
-    console.log(this.drawer);
+  mounted() {
+    this.initActiveTitle();
   },
   created() {
     this.$vuetify.theme.dark = true;
+  },
+  methods: {
+    initActiveTitle(){
+      let pathtemp = this.$router.currentRoute.path
+      for(let i = 0, arri = this.menu.length; i < arri ; ++i){
+        if(this.menu[i].path === pathtemp){
+          this.setActiveTitle(this.menu[i].title);
+          break;
+        }
+      }
+    },
+    setActiveTitle(title) {
+      this.activeTitle = title;
+    }
   }
 };
 </script>
