@@ -1,15 +1,15 @@
 <template>
   <div id="tenantdetail">
-    <Personalinfo :personinfo="tenant"/>
-    <Electronic/>
-    <Water/>
+    <Personalinfo :personinfo="tenant" />
+    <Electronic />
+    <Water />
   </div>
 </template>
 
 <script>
-import Personalinfo from '../components/tenantDetail/Personalinfo.vue';
-import Electronic from '../components/tenantDetail/Electronic';
-import Water from '../components/tenantDetail/Water';
+import Personalinfo from "../components/tenantDetail/Personalinfo.vue";
+import Electronic from "../components/tenantDetail/Electronic";
+import Water from "../components/tenantDetail/Water";
 
 export default {
   name: "TenantDetail",
@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      tenant:{
+      tenant: {
         fname: "ไก่",
         lname: "ไข่",
         mname: "ก",
