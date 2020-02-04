@@ -31,4 +31,7 @@ export default {
 
 
 <style>
+#bgt{
+    background-color: aquamarine !important;
+}
 </style>

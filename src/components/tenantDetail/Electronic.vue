@@ -26,20 +26,15 @@
           </div>
         </v-col>
         <v-col cols="6">
-          <v-overflow-btn
-            class="my-2"
-            :items="dropdown_icon"
-            label="เลือกหม้อไฟฟ้า"
-            color="amber darken-3"
-          ></v-overflow-btn>
+          <v-select v-model="elec" :items="items" clearable label="เลือกหม้อไฟฟ้า" color="amber darken-3"></v-select>
         </v-col>
       </v-row>
-      
+
       <v-form v-if="true">
         <v-row>
           <v-col cols="4" offset="3">
             <v-text-field
-              v-model="firstname"
+              v-model="unitelec"
               label="หน่วยไฟฟ้าเดือนนี้"
               required
               color="amber darken-3"
@@ -53,8 +48,6 @@
           </v-col>
         </v-row>
       </v-form>
-
-
     </v-container>
   </div>
 </template>
@@ -64,22 +57,16 @@ export default {
   name: "Electronic",
   data() {
     return {
+      unitelec: "",
+      elec: "",
       mount: "มีนาคม 2563",
-      dropdown_icon: [
-        { text: "list", callback: () => console.log("list") },
-        { text: "favorite", callback: () => console.log("favorite") },
-        { text: "delete", callback: () => console.log("delete") }
-      ]
+      items: ["default", "vertical"]
     };
   }
 };
 </script>
 
 <style scoped>
-#bgt {
-  background-color: aquamarine !important;
-}
-
 .ebtn {
   margin-top: 14px;
 }
@@ -91,7 +78,6 @@ export default {
 .period {
   /* background-color: aquamarine; */
   height: 50px;
-  margin-top: 8px;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -3,6 +3,11 @@
     <v-form>
       <v-container class="cn">
         <v-row>
+          <v-col cols="2" offset="10">
+            <v-switch v-model="active" color="green accent-4" :label="`สถานะเช่า: ${active.toString()}`"></v-switch>
+          </v-col>
+        </v-row>
+        <v-row>
           <v-col cols="12">
             <p class="font-weight-bold text-center">รายละเอียดผู้เช่า</p>
           </v-col>
@@ -39,9 +44,12 @@
 <script>
 export default {
   name: "Personalinfo",
-  props: [
-      "personinfo"
-  ]
+  props: ["personinfo"],
+  data() {
+    return {
+      active: true
+    };
+  }
 };
 </script>
 

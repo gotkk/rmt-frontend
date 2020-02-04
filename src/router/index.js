@@ -27,7 +27,7 @@ const routes = [
   },
   {
     path: '/tenant/:id',
-    name: 'tenant',
+    name: 'tenantDetail',
     component: TenantDetail,
   }
 ]
