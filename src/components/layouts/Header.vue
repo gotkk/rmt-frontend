@@ -3,9 +3,9 @@
     <v-navigation-drawer v-model="drawer" app temporary>
       <v-list dense>
         <v-list-item
+          link
           v-for="(item, index) in menu"
           :key="index"
-          link
           :to="item.path"
           @click="setActiveTitle(item.title)"
         >
@@ -91,10 +91,10 @@ export default {
     this.$vuetify.theme.dark = true;
   },
   methods: {
-    initActiveTitle(){
-      let pathtemp = this.$router.currentRoute.path
-      for(let i = 0, arri = this.menu.length; i < arri ; ++i){
-        if(this.menu[i].path === pathtemp){
+    initActiveTitle() {
+      let pathtemp = this.$router.currentRoute.path;
+      for (let i = 0, arri = this.menu.length; i < arri; ++i) {
+        if (this.menu[i].path === pathtemp) {
           this.setActiveTitle(this.menu[i].title);
           break;
         }
