@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
 import Tenant from '@/views/Tenant.vue'
 import TenantDetail from '@/views/TenantDetail.vue'
+import Management from '@/views/Management.vue'
 
 Vue.use(VueRouter)
 
@@ -29,7 +30,12 @@ const routes = [
     path: '/tenant/:id',
     name: 'tenantDetail',
     component: TenantDetail,
-  }
+  },
+  {
+    path: '/management',
+    name: 'management',
+    component: Management,
+  },
 ]
 
 const router = new VueRouter({

@@ -27,7 +27,6 @@
 </template>
 
 <script>
-// https://cdn.materialdesignicons.com/2.0.46/
 
 export default {
   props: {
@@ -53,8 +52,8 @@ export default {
         title: "แจ้งเตือน"
       },
       {
-        path: "/manege",
-        icon: "mdi-calculator",
+        path: "/management",
+        icon: "mdi-google-keep",
         title: "การจัดการ"
       },
       {

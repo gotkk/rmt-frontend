@@ -26,7 +26,7 @@
           </div>
         </v-col>
         <v-col cols="6">
-          <v-select v-model="elec" :items="items" clearable label="เลือกหม้อน้ำประปา" color="light-blue darken-2"></v-select>
+          <v-select v-model="wat" :items="items" clearable label="เลือกหม้อน้ำประปา" color="light-blue darken-2"></v-select>
         </v-col>
       </v-row>
 
@@ -53,6 +53,7 @@ export default {
   data() {
     return {
       unitwt: "",
+      wat: "",
       mount: "มีนาคม 2563",
       items: ["default", "vertical"]
     };

@@ -20,6 +20,8 @@
 import Header from "@/components/layouts/Header.vue";
 import Footer from "@/components/layouts/Footer.vue";
 
+// จัดการ สำหรับเพิ่ม แก้ไข ลบ ผู้เช่า ที่ดิน ไฟฟ้า ประปา
+
 export default {
   name: "App",
   components: {
