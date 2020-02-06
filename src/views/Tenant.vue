@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import Tntable from "@/components/tenant/Tntable.vue";
+import Tntable from "../components/tenant/Tntable.vue";
 
 export default {
   name: "Tenant",
