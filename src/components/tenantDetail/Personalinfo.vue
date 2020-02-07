@@ -1,7 +1,7 @@
 <template>
   <div id="personalinfo">
     <v-form>
-      <v-container class="cn">
+      <v-container class="cn" v-animate-css="'fadeIn'">
         <v-row>
           <v-col cols="2" offset="10">
             <v-switch v-model="active" color="green accent-4" :label="`สถานะเช่า: ${active.toString()}`"></v-switch>

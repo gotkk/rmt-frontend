@@ -1,7 +1,7 @@
 <template>
   <div id="menutenant">
     <v-container>
-      <div class="menublock">
+      <div class="menublock" v-animate-css="'pulse'">
 
         <div v-if="active===0" class="menu-item menu-active">
           <v-icon class="menu-icon">mdi-account</v-icon>

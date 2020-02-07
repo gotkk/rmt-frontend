@@ -1,6 +1,6 @@
 <template>
   <!-- <v-data-table :headers="headers" :items="desserts" :items-per-page="10" class="elevation-1" @click:row="selectTenant(desserts[index].fname)"></v-data-table> -->
-  <v-card>
+  <v-card v-animate-css="'fadeIn'">
     <v-card-title>
       ผู้เช่า
       <v-spacer></v-spacer>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container class="cn">
+    <v-container class="cn" v-animate-css="'fadeIn'">
       <v-row>
         <v-col cols="12">
           <p class="txt18 text-center">น้ำประปา</p>
