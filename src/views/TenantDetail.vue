@@ -1,6 +1,6 @@
 <template>
   <div id="tenantdetail">
-    <Menu @onSelect="handleSelectTenant" :active="menuactive" />
+    <MnTenantDetail @onSelect="handleSelectTenant" :active="menuactive" />
     <Personalinfo v-if="menuactive===0" :personinfo="tenant" />
     <RentDetail v-else-if="menuactive===1" />
     <Electronic v-else-if="menuactive===2" />
@@ -12,7 +12,7 @@
 import Personalinfo from '../components/tenantDetail/Personalinfo';
 import Electronic from '../components/tenantDetail/Electronic';
 import Water from '../components/tenantDetail/Water';
-import Menu from '../components/tenantDetail/Menu';
+import MnTenantDetail from '../components/tenantDetail/MnTenantDetail';
 import RentDetail from '../components/tenantDetail/RentDetail';
 
 export default {
@@ -21,7 +21,7 @@ export default {
     Personalinfo,
     Electronic,
     Water,
-    Menu,
+    MnTenantDetail,
     RentDetail
   },
   data() {

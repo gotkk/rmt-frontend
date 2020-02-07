@@ -37,7 +37,7 @@
 
 <script>
 export default {
-  name: "Menu",
+  name: "MnTenantDetail",
   props:[
     "active"
   ],

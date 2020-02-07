@@ -5,6 +5,10 @@ import store from './store'
 import vuetify from '@/plugins/vuetify'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
+import VAnimateCss from 'v-animate-css';
+ 
+Vue.use(VAnimateCss);
+
 Vue.config.productionTip = false
 
 new Vue({
