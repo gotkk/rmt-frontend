@@ -59,10 +59,7 @@ export default {
   margin-top: 16px;
   margin-bottom: 16px;
 }
-#menutenant .menu-item:hover{
-  box-shadow: 0 8px 16px 0 rgba(255, 255, 255, 0.2),
-    0 6px 20px 0 rgba(255, 0, 242, 0.19);
-}
+
 #menutenant .menu-item {
   display: flex;
   justify-content: center;
@@ -74,6 +71,11 @@ export default {
   border-radius: 5vw;
   cursor: pointer;
 }
+#menutenant .menu-item:hover{
+  box-shadow: 0 8px 16px 0 rgba(255, 255, 255, 0.2),
+    0 6px 20px 0 rgba(255, 0, 242, 0.19);
+}
+
 #menutenant .menu-icon {
   font-size: 6vw;
 }

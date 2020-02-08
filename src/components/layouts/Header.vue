@@ -67,7 +67,7 @@ export default {
         title: "ที่ดิน"
       },
       {
-        path: "/electronic",
+        path: "/electricity",
         icon: "mdi-flash",
         title: "ไฟฟ้า"
       },

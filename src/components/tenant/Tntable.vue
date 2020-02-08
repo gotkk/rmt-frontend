@@ -26,7 +26,7 @@
 
 <script>
 export default {
-  name: "Tntable",
+  name: "TnTable",
   methods: {
     handleSelect(tenant) {
       this.$router.push({ path: `/tenant/${tenant._id}` });
@@ -42,7 +42,7 @@ export default {
         { text: "นามสกุล", value: "lastname" },
         { text: "ชื่อเล่น", value: "nickname" },
         { text: "เบอร์โทร", value: "tel" },
-        { text: "สถานะเช่า", value: "status" }
+        { text: "สถานะเช่า", value: "tenantstatus" }
       ]
     };
   },

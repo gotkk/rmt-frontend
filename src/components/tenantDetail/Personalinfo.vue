@@ -4,7 +4,7 @@
       <v-container class="cn" v-animate-css="'fadeIn'">
         <v-row>
           <v-col cols="6" offset="6" class="d-flex justify-end">
-            <v-switch v-model="personinfo.status" color="green accent-4" :label="`สถานะเช่า ${personinfo.status.toString()}`" disabled></v-switch>
+            <v-switch v-model="personinfo.status" color="green accent-4" :label="`สถานะเช่า ${personinfo.tenantstatus.toString()}`" disabled></v-switch>
           </v-col>
         </v-row>
         <v-row>

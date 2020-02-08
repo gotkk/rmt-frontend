@@ -4,6 +4,9 @@ import Home from '@/views/Home.vue'
 import Tenant from '@/views/Tenant.vue'
 import TenantDetail from '@/views/TenantDetail.vue'
 import Management from '@/views/Management.vue'
+import Land from '@/views/Land.vue'
+import Electricity from '@/views/Electricity.vue'
+import Water from '@/views/Water.vue'
 
 Vue.use(VueRouter)
 
@@ -35,6 +38,21 @@ const routes = [
     path: '/management',
     name: 'management',
     component: Management,
+  },
+  {
+    path: '/land',
+    name: 'land',
+    component: Land,
+  },
+  {
+    path: '/electricity',
+    name: 'electricity',
+    component: Electricity,
+  },
+  {
+    path: '/water',
+    name: 'water',
+    component: Water,
   },
 ]
 

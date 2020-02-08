@@ -8,7 +8,7 @@
       </v-row>
       <v-row>
         <v-col cols="12">
-          <Tntable :tenant="$store.getters.tenant" />
+          <TnTable :tenant="$store.getters.tenant" />
         </v-col>
       </v-row>
     </v-container>
@@ -16,23 +16,15 @@
 </template>
 
 <script>
-import Tntable from "../components/tenant/Tntable.vue";
+import TnTable from "../components/tenant/TnTable";
 
 export default {
   name: "Tenant",
   components: {
-    Tntable
-  },
-  data() {
-    return {
-      tenant: ""
-    };
+    TnTable
   },
   mounted() {
     this.$store.dispatch("getAllTenant");
-  },
-  updated() {
-
   }
 };
 </script>
