@@ -12,6 +12,7 @@
       :items="tenant"
       :search="search"
       @click:row="handleSelect"
+      v-if="tenant"
     >
       <v-alert
         slot="no-results"
@@ -28,7 +29,7 @@ export default {
   name: "Tntable",
   methods: {
     handleSelect(tenant) {
-      this.$router.push({ path: `/tenant/${tenant.id}` }) 
+      this.$router.push({ path: `/tenant/${tenant._id}` });
     }
   },
   data() {
@@ -36,33 +37,16 @@ export default {
       selected: [],
       search: "",
       headers: [
-        { text: "id", value: "id" },
+        { text: "รหัสผู้เช่า", value: "_id" },
         { text: "ชื่อ", value: "firstname" },
         { text: "นามสกุล", value: "lastname" },
         { text: "ชื่อเล่น", value: "nickname" },
         { text: "เบอร์โทร", value: "tel" },
-        { text: "สถานะเช่า", value: "statusR" }
-      ],
-      tenant: [
-        {
-          id: "456sd6465s891",
-          firstname: "Frozen",
-          lastname: "Yogurt",
-          nickname: "a",
-          tel: "083-4567283",
-          statusR: true
-        },
-        {
-          id: "s45sdsd64sdsa",
-          firstname: "Yogurt",
-          lastname: "Frozen",
-          nickname: "b",
-          tel: "081-7891542",
-          statusR: false
-        }
+        { text: "สถานะเช่า", value: "status" }
       ]
     };
-  }
+  },
+  props: ["tenant"]
 };
 </script>
 

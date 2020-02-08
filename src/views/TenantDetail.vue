@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import Personalinfo from '../components/tenantDetail/Personalinfo';
-import Electronic from '../components/tenantDetail/Electronic';
-import Water from '../components/tenantDetail/Water';
-import MnTenantDetail from '../components/tenantDetail/MnTenantDetail';
-import RentDetail from '../components/tenantDetail/RentDetail';
+import Personalinfo from "../components/tenantDetail/Personalinfo";
+import Electronic from "../components/tenantDetail/Electronic";
+import Water from "../components/tenantDetail/Water";
+import MnTenantDetail from "../components/tenantDetail/MnTenantDetail";
+import RentDetail from "../components/tenantDetail/RentDetail";
 
 export default {
   name: "TenantDetail",
@@ -27,18 +27,28 @@ export default {
   data() {
     return {
       menuactive: 0,
-      tenant: {
-        fname: "ไก่",
-        lname: "ไข่",
-        mname: "ก",
-        tel: "081-7774569"
-      }
+      tenant: {}
     };
   },
   methods: {
     handleSelectTenant(index) {
       this.menuactive = index;
+    },
+    initialPersonalInfo() {
+      let alltenant = this.$store.getters.tenant;
+      if (!alltenant) {
+        this.$router.push({ path: "/tenant" });
+      }
+      for (let i = 0, arri = alltenant.length; i < arri; ++i) {
+        if (alltenant[i]._id === this.$route.params.id) {
+          this.tenant = alltenant[i];
+          break;
+        }
+      }
     }
+  },
+  mounted() {
+    this.initialPersonalInfo();
   }
 };
 </script>

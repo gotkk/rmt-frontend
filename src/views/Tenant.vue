@@ -8,7 +8,7 @@
       </v-row>
       <v-row>
         <v-col cols="12">
-          <Tntable />
+          <Tntable :tenant="$store.getters.tenant" />
         </v-col>
       </v-row>
     </v-container>
@@ -22,6 +22,17 @@ export default {
   name: "Tenant",
   components: {
     Tntable
+  },
+  data() {
+    return {
+      tenant: ""
+    };
+  },
+  mounted() {
+    this.$store.dispatch("getAllTenant");
+  },
+  updated() {
+
   }
 };
 </script>

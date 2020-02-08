@@ -53,6 +53,7 @@ export default {
   data() {
     return {
       unitwt: "",
+      elec: "",
       wat: "",
       mount: "มีนาคม 2563",
       items: ["default", "vertical"]

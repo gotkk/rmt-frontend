@@ -3,8 +3,8 @@
     <v-form>
       <v-container class="cn" v-animate-css="'fadeIn'">
         <v-row>
-          <v-col cols="2" offset="10">
-            <v-switch v-model="active" color="green accent-4" :label="`สถานะเช่า: ${active.toString()}`"></v-switch>
+          <v-col cols="6" offset="6" class="d-flex justify-end">
+            <v-switch v-model="personinfo.status" color="green accent-4" :label="`สถานะเช่า ${personinfo.status.toString()}`" disabled></v-switch>
           </v-col>
         </v-row>
         <v-row>
@@ -14,15 +14,15 @@
         </v-row>
         <v-row>
           <v-col cols="6">
-            <v-text-field v-model="personinfo.fname" label="Firstname" disabled></v-text-field>
+            <v-text-field v-model="personinfo.firstname" label="Firstname" disabled></v-text-field>
           </v-col>
           <v-col cols="6">
-            <v-text-field v-model="personinfo.lname" label="Lastname" disabled></v-text-field>
+            <v-text-field v-model="personinfo.lastname" label="Lastname" disabled></v-text-field>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="6">
-            <v-text-field v-model="personinfo.mname" label="Nickname" disabled></v-text-field>
+            <v-text-field v-model="personinfo.nickname" label="Nickname" disabled></v-text-field>
           </v-col>
           <v-col cols="6">
             <v-text-field v-model="personinfo.tel" label="Telephone" disabled></v-text-field>
@@ -45,11 +45,6 @@
 export default {
   name: "Personalinfo",
   props: ["personinfo"],
-  data() {
-    return {
-      active: true
-    };
-  }
 };
 </script>
 
