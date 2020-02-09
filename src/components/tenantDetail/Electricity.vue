@@ -54,7 +54,7 @@
 
 <script>
 export default {
-  name: "Electronic",
+  name: "Electricity",
   data() {
     return {
       unitelec: "",

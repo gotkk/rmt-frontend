@@ -16,7 +16,7 @@ const mutations = {
 
 const actions = {
     getAllElectricity({commit}){
-        axios.get("http://localhost:3000/electricity")
+        axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}electricity`)
         .then(res => {
             commit("setElectricity", res.data)
         })

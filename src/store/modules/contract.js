@@ -1,24 +1,24 @@
 const axios = require('axios');
 
 const state = {
-    water: ""
+    contract: ""
 }
 
 const getters = {
-    water: state => state.water
+    contract: state => state.contract
 }
 
 const mutations = {
-    setWater(state, water){
-        state.water = water.result;
+    setContract(state, contract){
+        state.contract = contract.result;
     }
 }
 
 const actions = {
-    getAllWater({commit}){
-        axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}water`)
+    getAllContract({commit}){
+        axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}contract`)
         .then(res => {
-            commit("setWater", res.data)
+            commit("setContract", res.data)
         })
         .catch(err => {
             console.log(err);

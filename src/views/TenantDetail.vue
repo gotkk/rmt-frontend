@@ -2,27 +2,30 @@
   <div id="tenantdetail">
     <MnTenantDetail @onSelect="handleSelectTenant" :active="menuactive" />
     <Personalinfo v-if="menuactive===0" :personinfo="tenant" />
-    <RentDetail v-else-if="menuactive===1" />
-    <Electronic v-else-if="menuactive===2" />
-    <Water v-else-if="menuactive===3" />
+    <Contract v-else-if="menuactive===1" :contract="tenant.contract[0]"/>
+    <RentDetail v-else-if="menuactive===2" />
+    <Electricity v-else-if="menuactive===3" />
+    <Water v-else-if="menuactive===4" />
   </div>
 </template>
 
 <script>
 import Personalinfo from "../components/tenantDetail/Personalinfo";
-import Electronic from "../components/tenantDetail/Electronic";
+import Electricity from "../components/tenantDetail/Electricity";
 import Water from "../components/tenantDetail/Water";
 import MnTenantDetail from "../components/tenantDetail/MnTenantDetail";
 import RentDetail from "../components/tenantDetail/RentDetail";
+import Contract from '../components/tenantDetail/Contract';
 
 export default {
   name: "TenantDetail",
   components: {
     Personalinfo,
-    Electronic,
+    Electricity,
     Water,
     MnTenantDetail,
-    RentDetail
+    RentDetail,
+    Contract
   },
   data() {
     return {

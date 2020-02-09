@@ -16,7 +16,7 @@ const mutations = {
 
 const actions = {
     getAllTenant({commit}){
-        axios.get("http://localhost:3000/tenant")
+        axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}tenant`)
         .then(res => {
             commit("setTenant", res.data)
         })

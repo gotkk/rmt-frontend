@@ -16,7 +16,7 @@ const mutations = {
 
 const actions = {
     getAllLand({commit}){
-        axios.get("http://localhost:3000/land")
+        axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}land`)
         .then(res => {
             commit("setLand", res.data)
         })

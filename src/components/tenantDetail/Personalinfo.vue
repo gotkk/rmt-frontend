@@ -1,12 +1,7 @@
 <template>
   <div id="personalinfo">
-    <v-form>
+    <v-form v-if="personinfo">
       <v-container class="cn" v-animate-css="'fadeIn'">
-        <v-row>
-          <v-col cols="6" offset="6" class="d-flex justify-end">
-            <v-switch v-model="personinfo.status" color="green accent-4" :label="`สถานะเช่า ${personinfo.tenantstatus.toString()}`" disabled></v-switch>
-          </v-col>
-        </v-row>
         <v-row>
           <v-col cols="12">
             <p class="font-weight-bold text-center">รายละเอียดผู้เช่า</p>

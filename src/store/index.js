@@ -3,7 +3,8 @@ import Vuex from 'vuex'
 import tenant from './modules/tenant';
 import land from './modules/land';
 import electricity from './modules/electricity';
-import water from './modules/water'
+import water from './modules/water';
+import contract from './modules/contract';
 
 Vue.use(Vuex)
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     tenant,
     land,
     electricity,
-    water
+    water,
+    contract
   }
 })
