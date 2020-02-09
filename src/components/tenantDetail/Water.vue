@@ -1,71 +1,147 @@
 <template>
   <div>
-    <v-container class="cn" v-animate-css="'fadeIn'">
+    <SelectContract :contract="contract" @setContractSelect="handleSelectContract" />
+
+    <v-container class="block-cn" v-animate-css="'fadeIn'" v-if="selected">
       <v-row>
         <v-col cols="12">
           <p class="txt18 text-center">น้ำประปา</p>
         </v-col>
       </v-row>
+      <hr />
 
-      <v-row v-if="false">
+      <v-row v-if="notuse">
         <v-col cols="12">
-          <p class="text-center">ไม่ได้ใช้ไฟฟ้า</p>
+          <p class="text-center">ไม่ได้ใช้น้ำประปา</p>
         </v-col>
       </v-row>
 
-      <v-row v-if="false">
+      <v-row v-else-if="paid">
         <v-col cols="12">
-          <p class="text-center">บันทึกข้อมูลแล้ว</p>
+          <p class="text-center">บันทึกข้อมูลน้ำประปาเดือนนี้แล้ว</p>
         </v-col>
       </v-row>
 
-      <v-row v-else>
-        <v-col cols="6">
-          <div class="period">
-            <span class="txt18">{{mount}}</span>
-          </div>
-        </v-col>
-        <v-col cols="6">
-          <v-select v-model="wat" :items="items" clearable label="เลือกหม้อน้ำประปา" color="light-blue darken-2"></v-select>
-        </v-col>
-      </v-row>
-
-      <v-form v-if="true">
+      <div v-else>
         <v-row>
-          <v-col cols="4" offset="3">
-            <v-text-field v-model="unitwt" label="หน่วยน้ำประปาเดือนนี้" required></v-text-field>
+          <v-col cols="6">
+            <div class="period">
+              <span class="txt18">{{period}}</span>
+            </div>
           </v-col>
-          <v-col cols="2">
-            <v-btn color="light-blue darken-2" block class="ebtn">
-              <v-icon>mdi-content-save</v-icon>
-              <span>บันทึก</span>
-            </v-btn>
+          <v-col cols="6">
+            <v-select
+              v-model="waterselected"
+              :items="wateritems"
+              clearable
+              label="เลือกหม้อน้ำประปา"
+              color="light-blue darken-2"
+            ></v-select>
           </v-col>
         </v-row>
-      </v-form>
+
+        <v-form>
+          <v-row>
+            <v-col cols="4" offset="3">
+              <v-text-field v-model="unitwater" label="หน่วยน้ำประปาเดือนนี้" required></v-text-field>
+            </v-col>
+            <v-col cols="2">
+              <v-btn color="light-blue darken-2" block class="ebtn">
+                <v-icon>mdi-content-save</v-icon>
+                <span>บันทึก</span>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-form>
+      </div>
     </v-container>
   </div>
 </template>
 
 <script>
+import SelectContract from "./tdComponent/SelectContract";
+
 export default {
   name: "Electronic",
+  props: ["bill", "contract"],
+  components: {
+    SelectContract
+  },
   data() {
     return {
-      unitwt: "",
-      elec: "",
-      wat: "",
-      mount: "มีนาคม 2563",
-      items: ["default", "vertical"]
+      month: [
+        "มกราคม",
+        "กุมภาพันธ์",
+        "มีนาคม",
+        "เมษายน",
+        "พฤษภาคม",
+        "มิถุนายน",
+        "กรกฎาคม",
+        "สิงหาคม",
+        "กันยายน",
+        "ตุลาคม",
+        "พฤศจิกายน",
+        "ธันวาคม"
+      ],
+      unitwater: "",
+      contractselect: {},
+      wateritems: [],
+      waterselected: "",
+      period: "period",
+      paid: false,
+      notuse: false,
+      selected: false
     };
+  },
+  mounted() {},
+  methods: {
+    checkPeriod() {
+      let waterf = this.contractselect.water;
+      if (waterf.length === 0) {
+        this.notuse = true;
+      } else {
+        let { month: bmonth, year: byear } = this.bill;
+        let date = new Date();
+        let mindex = date.getMonth();
+        let month = this.month[mindex];
+        let year = date.getFullYear();
+        if (mindex === bmonth && year === byear) {
+          this.paid = true;
+        } else {
+          this.period = month + " " + year;
+          for (let i = 0, arri = waterf.length; i < arri; ++i) {
+            this.wateritems.push(waterf[i].watername);
+          }
+        }
+      }
+    },
+    handleSelectContract(value) {
+      this.resetData();
+      for (let i = 0, arri = this.contract.length; i < arri; ++i) {
+        if (this.contract[i].name === value) {
+          this.contractselect = this.contract[i];
+          this.selected = true;
+          break;
+        }
+      }
+      this.checkPeriod();
+    },
+    resetData() {
+      this.contractselect = {};
+      this.selected = false;
+      this.notuse = false;
+      this.paid = false;
+      this.period = "period";
+      this.wateritems = [];
+      this.waterselected = "";
+    }
   }
 };
 </script>
 
 <style scoped>
-
-.ebtn{
-    margin-top: 14px;
+.ebtn {
+  margin-top: 14px;
 }
 
 .txt18 {
@@ -79,18 +155,7 @@ export default {
   align-items: center;
   justify-content: center;
   border-style: solid;
-  border-color: #0288D1;
+  border-color: #0288d1;
   border-width: 2px !important;
-}
-
-.cn {
-  /* background-color: orange; */
-  margin-top: 16px;
-  border-radius: 16px;
-  border-width: 2px;
-  /* border-color: red; */
-  border-style: solid;
-  box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.2),
-    0 6px 20px 0 rgba(255, 255, 255, 0.19);
 }
 </style>

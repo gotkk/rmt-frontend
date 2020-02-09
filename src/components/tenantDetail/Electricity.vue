@@ -1,67 +1,145 @@
 <template>
   <div>
-    <v-container class="cn" v-animate-css="'fadeIn'">
+    <SelectContract :contract="contract" @setContractSelect="handleSelectContract" />
+
+    <v-container class="block-cn" v-animate-css="'fadeIn'" v-if="selected">
       <v-row>
         <v-col cols="12">
           <p class="txt18 text-center">ไฟฟ้า</p>
         </v-col>
       </v-row>
+      <hr />
 
-      <v-row v-if="false">
+      <v-row v-if="notuse">
         <v-col cols="12">
           <p class="text-center">ไม่ได้ใช้ไฟฟ้า</p>
         </v-col>
       </v-row>
 
-      <v-row v-if="false">
+      <v-row v-else-if="paid">
         <v-col cols="12">
-          <p class="text-center">บันทึกข้อมูลแล้ว</p>
+          <p class="text-center">บันทึกข้อมูลไฟฟ้าเดือนนี้แล้ว</p>
         </v-col>
       </v-row>
 
-      <v-row v-else>
-        <v-col cols="6">
-          <div class="period">
-            <span class="txt18">{{mount}}</span>
-          </div>
-        </v-col>
-        <v-col cols="6">
-          <v-select v-model="elec" :items="items" clearable label="เลือกหม้อไฟฟ้า" color="amber darken-3"></v-select>
-        </v-col>
-      </v-row>
-
-      <v-form v-if="true">
+      <div v-else>
         <v-row>
-          <v-col cols="4" offset="3">
-            <v-text-field
-              v-model="unitelec"
-              label="หน่วยไฟฟ้าเดือนนี้"
-              required
-              color="amber darken-3"
-            ></v-text-field>
+          <v-col cols="6">
+            <div class="period">
+              <span class="txt18">{{period}}</span>
+            </div>
           </v-col>
-          <v-col cols="2">
-            <v-btn color="amber darken-3" block class="ebtn">
-              <v-icon>mdi-content-save</v-icon>
-              <span>บันทึก</span>
-            </v-btn>
+          <v-col cols="6">
+            <v-select
+              v-model="electselected"
+              :items="electitems"
+              clearable
+              label="เลือกหม้อไฟฟ้า"
+              color="amber darken-3"
+            ></v-select>
           </v-col>
         </v-row>
-      </v-form>
+
+        <v-form>
+          <v-row>
+            <v-col cols="4" offset="3">
+              <v-text-field
+                v-model="unitelect"
+                label="หน่วยไฟฟ้าเดือนนี้"
+                required
+                color="amber darken-3"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="2">
+              <v-btn color="amber darken-3" block class="ebtn">
+                <v-icon>mdi-content-save</v-icon>
+                <span>บันทึก</span>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-form>
+      </div>
     </v-container>
   </div>
 </template>
 
 <script>
+import SelectContract from "./tdComponent/SelectContract";
+
 export default {
   name: "Electricity",
+  props: ["bill", "contract"],
+  components: {
+    SelectContract
+  },
   data() {
     return {
-      unitelec: "",
-      elec: "",
-      mount: "มีนาคม 2563",
-      items: ["default", "vertical"]
+      month: [
+        "มกราคม",
+        "กุมภาพันธ์",
+        "มีนาคม",
+        "เมษายน",
+        "พฤษภาคม",
+        "มิถุนายน",
+        "กรกฎาคม",
+        "สิงหาคม",
+        "กันยายน",
+        "ตุลาคม",
+        "พฤศจิกายน",
+        "ธันวาคม"
+      ],
+      unitelect: "",
+      contractselect: {},
+      electitems: [],
+      electselected: "",
+      period: "period",
+      paid: false,
+      notuse: false,
+      selected: false
     };
+  },
+  mounted() {},
+  methods: {
+    checkPeriod() {
+      let etc = this.contractselect.electricity;
+      if (etc.length === 0) {
+        this.notuse = true;
+      } else {
+        let { month: bmonth, year: byear } = this.bill;
+        let date = new Date();
+        let mindex = date.getMonth();
+        let month = this.month[mindex];
+        let year = date.getFullYear();
+        if (mindex === bmonth && year === byear) {
+          this.paid = true;
+        } else {
+          this.period = month + " " + year;
+          for (let i = 0, arri = etc.length; i < arri; ++i) {
+            this.electitems.push(etc[i].electname);
+          }
+        }
+      }
+    },
+    handleSelectContract(value) {
+      this.resetData();
+      for (let i = 0, arri = this.contract.length; i < arri; ++i) {
+        if (this.contract[i].name === value) {
+          this.contractselect = this.contract[i];
+          this.selected = true;
+          break;
+        }
+      }
+      this.checkPeriod();
+    },
+    resetData() {
+      this.contractselect = {};
+      this.selected = false;
+      this.notuse = false;
+      this.paid = false;
+      this.period = "period";
+      this.electitems = [];
+      this.electselected = "";
+    }
   }
 };
 </script>
@@ -84,16 +162,5 @@ export default {
   border-style: solid;
   border-color: #ff8f00;
   border-width: 2px !important;
-}
-
-.cn {
-  /* background-color: orange; */
-  margin-top: 16px;
-  border-radius: 16px;
-  border-width: 2px;
-  /* border-color: red; */
-  border-style: solid;
-  box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.2),
-    0 6px 20px 0 rgba(255, 255, 255, 0.19);
 }
 </style>
