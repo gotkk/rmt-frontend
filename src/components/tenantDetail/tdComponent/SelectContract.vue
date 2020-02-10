@@ -1,13 +1,10 @@
 <template>
   <div id="SelectContract">
-    <v-container class="block-cn" v-animate-css="'fadeIn'">
       <v-row>
         <v-col>
-          <p class="text-center">เลือกสัญญาเช่า</p>
           <v-overflow-btn :items="contractlist" label="เลือกสัญญาเช่า" target="#dropdown-contract" v-model="contractselected"></v-overflow-btn>
         </v-col>
       </v-row>
-    </v-container>
   </div>
 </template>
 

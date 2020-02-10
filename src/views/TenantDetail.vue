@@ -8,20 +8,17 @@
       :bill="tenant.bill"
       :contract="tenant.contract"
       :tenant="tenant"
-      :electricity="tenant.contract[0].electricity"
-      :water="tenant.contract[0].water"
     />
     <Electricity
       v-else-if="menuactive===3"
       :contract="tenant.contract"
-      :electricity="tenant.contract[0].electricity"
-      :bill="tenant.bill[tenant.bill.length-1]"
+      :bill="tenant.bill"
     />
     <Water
       v-else-if="menuactive===4"
       :contract="tenant.contract"
       :water="tenant.contract[0].water"
-      :bill="tenant.bill[tenant.bill.length-1]"
+      :bill="tenant.bill"
     />
   </div>
 </template>

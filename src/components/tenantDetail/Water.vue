@@ -1,6 +1,28 @@
 <template>
   <div>
-    <SelectContract :contract="contract" @setContractSelect="handleSelectContract" />
+    <v-container class="block-cn" v-animate-css="'fadeIn'">
+      <v-row>
+        <v-col>
+          <p class="text-center">จัดการข้อมูลไฟฟ้าเดือนนี้</p>
+        </v-col>
+      </v-row>
+      <SelectContract
+        :contract="contract"
+        @setContractSelect="handleSelectContract"
+        v-if="!selected"
+      />
+
+      <div v-if="selected">
+        <v-row v-animate-css="'fadeInDown'">
+          <v-col>
+            <span>สัญญาเช่า</span>
+          </v-col>
+          <v-col class="d-flex justify-end">
+            <span>{{this.contractselect.name}}</span>
+          </v-col>
+        </v-row>
+      </div>
+    </v-container>
 
     <v-container class="block-cn" v-animate-css="'fadeIn'" v-if="selected">
       <v-row>
@@ -90,7 +112,8 @@ export default {
       period: "period",
       paid: false,
       notuse: false,
-      selected: false
+      selected: false,
+      billselect: {}
     };
   },
   mounted() {},
@@ -100,7 +123,7 @@ export default {
       if (waterf.length === 0) {
         this.notuse = true;
       } else {
-        let { month: bmonth, year: byear } = this.bill;
+        let { month: bmonth, year: byear } = this.billselect;
         let date = new Date();
         let mindex = date.getMonth();
         let month = this.month[mindex];
@@ -124,7 +147,22 @@ export default {
           break;
         }
       }
-      this.checkPeriod();
+      if (this.bill.length > 0 && this.contractselect !== {}) {
+        this.setBillSelect();
+      }
+      if (this.billselect !== {}) {
+        this.checkPeriod();
+      }
+    },
+    setBillSelect() {
+      let contractid = this.contractselect._id;
+      let billtemp = [];
+      for (let i = 0, arri = this.bill.length; i < arri; ++i) {
+        if (this.bill[i].contract === contractid) {
+          billtemp = [...billtemp, this.bill[i]];
+        }
+      }
+      this.billselect = billtemp[billtemp.length - 1];
     },
     resetData() {
       this.contractselect = {};
@@ -134,6 +172,8 @@ export default {
       this.period = "period";
       this.wateritems = [];
       this.waterselected = "";
+      this.billselect = {};
+      this.unitwater = "";
     }
   }
 };
