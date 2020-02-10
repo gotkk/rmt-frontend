@@ -29,48 +29,89 @@
       <div v-else-if="!ready">
         <v-row>
           <v-col cols="12">
-            <p class="text-center pt-8">ยังไม่ได้กรอกข้อมูลหน่วยไฟฟ้าหรือน้ำประปา</p>
+            <p
+              class="text-center pt-8"
+            >ยังไม่ได้กรอกข้อมูล หรือกรอกข้อมูลไม่ครบ (หน่วยของไฟฟ้า-น้ำประปา)</p>
           </v-col>
         </v-row>
       </div>
 
       <div v-else>
-        777
-        <!-- <v-row>
-          <v-col>
-            <p>หน่วยไฟฟ้า ({{bill.electunit[0].name}})</p>
-          </v-col>
-          <v-col>
-            <p class="text-right">{{bill.electunit[0].value}} หน่วย</p>
-          </v-col>
-        </v-row>
         <v-row>
           <v-col>
-            <p>ค่าไฟฟ้า ({{bill.electunit[0].name}})</p>
+            <p class="text-center">ข้อมูลการใช้ไฟฟ้า</p>
           </v-col>
+        </v-row>
+        <v-row v-if="notuseelect">
           <v-col>
-            <p
-              class="text-right"
-            >{{calculatePriceElect(bill.electunit[0]._id, bill.electunit[0].value)}} บาท</p>
+            <p class="text-center">ไม่ได้ใช้ไฟฟ้า</p>
           </v-col>
-        </v-row> -->
+        </v-row>
+        <div v-for="(item, index) in electcalcurate" :key="index">
+          <v-row>
+            <v-col>
+              <p>หม้อไฟฟ้า : {{item.name}}</p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <p>หน่วยไฟฟ้า x {{item.ppunit}}</p>
+            </v-col>
+            <v-col>
+              <p class="text-right">{{item.unit}} หน่วย</p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <p>ค่าไฟฟ้า</p>
+            </v-col>
+            <v-col>
+              <p class="text-right">{{item.total}} บาท</p>
+            </v-col>
+          </v-row>
+          <hr v-if="index!==electcalcurate.length-1" class="divider-dash" />
+        </div>
+        <hr />
 
-        <!-- <v-row>
-          <v-col>
-            <p>หน่วยน้ำ ({{bill.waterunit[0].name}})</p>
-          </v-col>
-          <v-col>
-            <p class="text-right">{{bill.waterunit[0].value}} หน่วย</p>
-          </v-col>
-        </v-row>
         <v-row>
           <v-col>
-            <p>ค่าน้ำ ({{bill.waterunit[0].name}})</p>
+            <p class="text-center">ข้อมูลการใช้น้ำประปา</p>
           </v-col>
+        </v-row>
+        <v-row v-if="notusewater">
           <v-col>
-            <p
-              class="text-right"
-            >{{calculatePriceWater(bill.waterunit[0]._id, bill.waterunit[0].value)}} บาท</p>
+            <p class="text-center">ไม่ได้ใช้น้ำประปา</p>
+          </v-col>
+        </v-row>
+        <div v-for="(item, index) in watercalculate" :key="index+1">
+          <v-row>
+            <v-col>
+              <p>หม้อน้ำประปา : {{item.name}}</p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <p>หน่วยน้ำ x {{item.ppunit}}</p>
+            </v-col>
+            <v-col>
+              <p class="text-right">{{item.unit}} หน่วย</p>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <p>ค่าน้ำ</p>
+            </v-col>
+            <v-col>
+              <p class="text-right">{{item.total}} บาท</p>
+            </v-col>
+          </v-row>
+          <hr v-if="index!==watercalculate.length-1" class="divider-dash" />
+        </div>
+        <hr />
+
+        <v-row>
+          <v-col>
+            <p class="text-center">สรุปรายการข้อมูล</p>
           </v-col>
         </v-row>
         <v-row>
@@ -78,7 +119,7 @@
             <p>ค่าเช่า</p>
           </v-col>
           <v-col>
-            <p class="text-right">{{contract.rent}} บาท</p>
+            <p class="text-right">{{rental}} บาท</p>
           </v-col>
         </v-row>
         <v-row>
@@ -86,7 +127,23 @@
             <p>ค่าปรับ</p>
           </v-col>
           <v-col>
-            <p class="text-right">999 บาท</p>
+            <p class="text-right">{{mulct}} บาท</p>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <p>ค่าไฟฟ้า</p>
+          </v-col>
+          <v-col>
+            <p class="text-right">{{sumelectprice}} บาท</p>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <p>ค่าน้ำประปา</p>
+          </v-col>
+          <v-col>
+            <p class="text-right">{{sumwaterprice}} บาท</p>
           </v-col>
         </v-row>
         <hr />
@@ -95,14 +152,15 @@
             <p>ยอดรวมที่ต้องจ่ายทั้งสิ้น</p>
           </v-col>
           <v-col>
-            <p class="text-right">999 บาท</p>
+            <p class="text-right">{{totalallprice}} บาท</p>
           </v-col>
         </v-row>
+        <hr />
         <v-row>
-          <v-col centered>
+          <v-col class="d-flex justify-center">
             <v-btn>ชำระค่าเช่า</v-btn>
           </v-col>
-        </v-row> -->
+        </v-row>
       </div>
     </v-container>
   </div>
@@ -113,7 +171,7 @@ import SelectContract from "./tdComponent/SelectContract";
 
 export default {
   name: "RentDetail",
-  props: ["bill", "contract"],
+  props: ["bill", "contract", "tenant"],
   components: {
     SelectContract
   },
@@ -134,9 +192,13 @@ export default {
         "ธันวาคม"
       ],
       contractselect: {},
+      billselect: {},
       paid: false,
       ready: false,
       selected: false,
+      notuse: false,
+      notuseelect: false,
+      notusewater: false,
       period: "period",
       selectunit: [],
       swaterunit: [],
@@ -144,48 +206,64 @@ export default {
       swaterprice: [],
       srental: 0,
       smulct: 0,
-      stotal: 0
+      stotal: 0,
+      electcalcurate: [],
+      watercalculate: [],
+      sumelectprice: 0,
+      sumwaterprice: 0,
+      totalallprice: 0,
+      rental: 0,
+      mulct: 0
     };
   },
   mounted() {},
+  updated() {},
   methods: {
     checkPeriod() {
+      let { billstatus } = this.billselect;
+      if (billstatus === "paid") {
+        this.paid = true;
+      }
+    },
+    checkReady() {
       let {
         month: bmonth,
         year: byear,
         electunit,
-        waterunit,
-        billstatus
-      } = this.bill;
-      if (billstatus === "paid") {
-        this.paid = true;
-      }
+        waterunit
+      } = this.billselect;
+      let { electricity, water } = this.contractselect;
       let date = new Date();
       let mindex = date.getMonth();
       let month = this.month[mindex];
       let year = date.getFullYear();
+      let eready = false;
+      let wready = false;
       this.period = month + " " + year;
       if (mindex === bmonth && year === byear) {
-        if (electunit.length > 0 && waterunit.length > 0) {
+        if (electricity.length !== 0) {
+          if (electunit.length === electricity.length) {
+            eready = true;
+          }
+        } else {
+          this.notuseelect = true;
+          eready = true;
+        }
+        if (water.length !== 0) {
+          if (waterunit.length === water.length) {
+            wready = true;
+          }
+        } else {
+          this.notusewater = true;
+          wready = true;
+        }
+        if (eready && wready) {
           this.ready = true;
+        } else {
+          this.ready = false;
         }
       }
     },
-    calculatePriceElect(id, unit) {
-      for (let i = 0, arri = this.electricity.length; i < arri; ++i) {
-        if (id === this.electricity[i]._id) {
-          return unit * this.electricity[i].electppunit;
-        }
-      }
-    },
-    calculatePriceWater(id, unit) {
-      for (let i = 0, arri = this.water.length; i < arri; ++i) {
-        if (id === this.water[i]._id) {
-          return unit * this.water[i].waterppunit;
-        }
-      }
-    },
-    setRentDetailList() {},
     handleSelectContract(value) {
       this.resetData();
       for (let i = 0, arri = this.contract.length; i < arri; ++i) {
@@ -195,14 +273,84 @@ export default {
           break;
         }
       }
-      this.checkPeriod();
+      if (this.bill.length > 0 && this.contractselect !== {}) {
+        this.setBillSelect();
+      }
+      if (this.billselect !== {}) {
+        this.checkPeriod();
+      }
+      if (!this.paid) {
+        this.checkReady();
+      }
+      if (this.ready) {
+        this.calculateTotalRent();
+      }
+    },
+    calculateTotalRent() {
+      for (
+        let i = 0, arri = this.contractselect.electricity.length;
+        i < arri;
+        ++i
+      ) {
+        let data = {
+          name: this.contractselect.electricity[i].electname,
+          unit: this.billselect.electunit[i].value,
+          ppunit: this.contractselect.electricity[i].electppunit,
+          total:
+            this.billselect.electunit[i].value *
+            this.contractselect.electricity[i].electppunit
+        };
+        this.sumelectprice = this.sumelectprice + data.total;
+        this.electcalcurate = [...this.electcalcurate, data];
+      }
+      for (let i = 0, arri = this.contractselect.water.length; i < arri; ++i) {
+        let data = {
+          name: this.contractselect.water[i].watername,
+          unit: this.billselect.waterunit[i].value,
+          ppunit: this.contractselect.water[i].waterppunit,
+          total:
+            this.billselect.waterunit[i].value *
+            this.contractselect.water[i].waterppunit
+        };
+        this.sumwaterprice = this.sumwaterprice + data.total;
+        this.watercalculate = [...this.watercalculate, data];
+      }
+      this.rental = this.contractselect.rent;
+      this.totalallprice = parseFloat(this.contractselect.rent) + this.sumelectprice + this.sumwaterprice + this.mulct;
+    },
+    setBillSelect() {
+      let contractid = this.contractselect._id;
+      for (let i = 0, arri = this.bill.length; i < arri; ++i) {
+        if (this.bill[i].contract === contractid) {
+          this.billselect = this.bill[i];
+          break;
+        }
+      }
     },
     resetData() {
+      this.electcalcurate = [];
+      this.watercalculate = [];
+      this.swaterprice = [];
+      this.selectprice = [];
+      this.selectunit = [];
+      this.swaterunit = [];
       this.contractselect = {};
+      this.billselect = {};
+      this.period = "period";
+      this.sumelectprice = 0;
+      this.sumwaterprice = 0;
+      this.totalallprice = 0;
+      this.srental = 0;
+      this.smulct = 0;
+      this.stotal = 0;
+      this.rental = 0;
+      this.mulct = 0;
+      this.notuseelect = false;
+      this.notusewater = false;
       this.selected = false;
       this.notuse = false;
+      this.ready = false;
       this.paid = false;
-      this.period = "period";
     }
   }
 };
@@ -226,5 +374,9 @@ export default {
   border-style: solid;
   border-color: #0288d1;
   border-width: 2px !important;
+}
+
+.divider-dash {
+  border-style: dashed;
 }
 </style>

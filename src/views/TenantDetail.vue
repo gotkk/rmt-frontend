@@ -5,8 +5,9 @@
     <Contract v-else-if="menuactive===1" :contract="tenant.contract" />
     <RentDetail
       v-else-if="menuactive===2"
-      :bill="tenant.bill[tenant.bill.length-1]"
+      :bill="tenant.bill"
       :contract="tenant.contract"
+      :tenant="tenant"
       :electricity="tenant.contract[0].electricity"
       :water="tenant.contract[0].water"
     />
