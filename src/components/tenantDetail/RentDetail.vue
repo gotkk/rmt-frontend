@@ -259,15 +259,17 @@ export default {
   },
   methods: {
     checkReady() {
-      let { electunit, waterunit, billstatus } = this.billselect;
+      let { electunit, waterunit, billstatus, month: bmonth, year: byear } = this.billselect;
       let { electricity, water } = this.contractselect;
-      let date = new Date();
-      let mindex = date.getMonth();
-      let month = this.month[mindex];
-      let year = date.getFullYear();
+      let month = this.month[bmonth];
       let eready = false;
       let wready = false;
-      this.period = month + " " + year;
+      this.period = month + " " + (byear+543);
+      // let date = new Date();
+      // let mindex = date.getMonth();
+      // let month = this.month[mindex];
+      // let year = date.getFullYear();
+      // this.period = month + " " + year;
       // if (mindex === bmonth && year === byear) {
       if (billstatus === "paid") {
         this.paid = true;
@@ -280,6 +282,7 @@ export default {
           this.notuseelect = true;
           eready = true;
         }
+
         if (water.length !== 0) {
           if (waterunit.length === water.length) {
             wready = true;

@@ -25,6 +25,9 @@ export default {
   },
   mounted() {
     this.$store.dispatch("getAllTenant");
+  },
+  updated(){
+    this.$store.dispatch("getAllTenant");
   }
 };
 </script>

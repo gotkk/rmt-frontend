@@ -9,20 +9,32 @@ const getters = {
 }
 
 const mutations = {
-    setTenant(state, tenant){
+    setTenant(state, tenant) {
         state.tenant = tenant.result;
+    },
+    setUpdate(){
+
     }
 }
 
 const actions = {
-    getAllTenant({commit}){
+    getAllTenant({ commit }) {
         axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}tenant`)
-        .then(res => {
-            commit("setTenant", res.data)
-        })
-        .catch(err => {
-            console.log(err);
-        })
+            .then(res => {
+                commit("setTenant", res.data)
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
+    updateTenantWithLastBill( { commit },tenantid) {
+        axios.put(`${process.env.VUE_APP_RWT_BACKEND_APP}tenant/${tenantid}/lastbill`)
+            .then(res => {
+                commit("setUpdate", res.data)
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 }
 

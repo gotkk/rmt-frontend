@@ -1,12 +1,28 @@
 <template>
   <div>
+    <v-container>
+      <v-row>
+        <v-col>
+          <DialogInitialBill :initialbill="billdialog" @setCloseBillDialog="handleCloseBillDialog" />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <DialogSaveUnit :saveunit="savedialog" @setCloseSaveDialog="handleCloseSaveDialog" />
+        </v-col>
+      </v-row>
+    </v-container>
     <v-container class="block-cn" v-animate-css="'fadeIn'">
       <v-row>
         <v-col>
           <p class="text-center">จัดการข้อมูลไฟฟ้าเดือนนี้</p>
         </v-col>
       </v-row>
-      <SelectContract :contract="contract" @setContractSelect="handleSelectContract" v-if="!selected"/>
+      <SelectContract
+        :contract="contract"
+        @setContractSelect="handleSelectContract"
+        v-if="!selected"
+      />
 
       <div v-if="selected">
         <v-row v-animate-css="'fadeInDown'">
@@ -20,7 +36,7 @@
       </div>
     </v-container>
 
-    <v-container class="block-cn" v-animate-css="'fadeIn'" v-if="selected">
+    <v-container class="block-cn" v-animate-css="'fadeIn'" v-if="selected&&ready">
       <v-row>
         <v-col cols="12">
           <p class="txt18 text-center">ไฟฟ้า</p>
@@ -40,6 +56,12 @@
         </v-col>
       </v-row>
 
+      <v-row v-else-if="cancel">
+        <v-col cols="12">
+          <p class="text-center">ยังไม่ได้เปิดบิลประจำเดือนปัจจุบัน</p>
+        </v-col>
+      </v-row>
+
       <div v-else>
         <v-row>
           <v-col cols="6">
@@ -51,14 +73,15 @@
             <v-select
               v-model="electselected"
               :items="electitems"
-              clearable
               label="เลือกหม้อไฟฟ้า"
               color="amber darken-3"
+              ref="selectelect"
+              :rules="electselectrules"
             ></v-select>
           </v-col>
         </v-row>
 
-        <v-form>
+        <v-form @submit.prevent>
           <v-row>
             <v-col cols="4" offset="3">
               <v-text-field
@@ -66,10 +89,13 @@
                 label="หน่วยไฟฟ้าเดือนนี้"
                 required
                 color="amber darken-3"
+                :rules="electunitrules"
+                ref="fillunitelect"
+                type="number"
               ></v-text-field>
             </v-col>
             <v-col cols="2">
-              <v-btn color="amber darken-3" block class="ebtn">
+              <v-btn color="amber darken-3" block class="ebtn" @click="prepareSubmit()">
                 <v-icon>mdi-content-save</v-icon>
                 <span>บันทึก</span>
               </v-btn>
@@ -83,12 +109,16 @@
 
 <script>
 import SelectContract from "./tdComponent/SelectContract";
+import DialogInitialBill from "./tdComponent/DialogInitialBill";
+import DialogSaveUnit from "./tdComponent/DialogSaveUnit";
 
 export default {
   name: "Electricity",
-  props: ["bill", "contract"],
+  props: ["bill", "contract", "tenant"],
   components: {
-    SelectContract
+    SelectContract,
+    DialogInitialBill,
+    DialogSaveUnit
   },
   data() {
     return {
@@ -114,28 +144,41 @@ export default {
       paid: false,
       notuse: false,
       selected: false,
-      billselect: {}
+      billdialog: false,
+      savedialog: false,
+      ready: false,
+      cancel: false,
+      billselect: {},
+      nowmonth: 0,
+      nowyear: 0,
+      electunitrules: [value => !!value || "กรุณากรอกหน่วยไฟฟ้า"],
+      electselectrules: [value => !!value || "กรุณาเลือกหม้อไฟฟ้า"],
+      f: false
     };
   },
   mounted() {},
   updated() {},
   methods: {
     checkPeriod() {
-      let etc = this.contractselect.electricity;
-      if (etc.length === 0) {
+      let { electricity: etc } = this.contractselect;
+      let { electunit, month: bmonth, year: byear } = this.billselect;
+      let countetc = etc.length;
+      let countbilletc = electunit.length;
+      if (countetc === 0) {
         this.notuse = true;
       } else {
-        let { month: bmonth, year: byear } = this.billselect;
-        let date = new Date();
-        let mindex = date.getMonth();
-        let month = this.month[mindex];
-        let year = date.getFullYear();
-        if (mindex === bmonth && year === byear) {
-          this.paid = true;
-        } else {
-          this.period = month + " " + year;
-          for (let i = 0, arri = etc.length; i < arri; ++i) {
-            this.electitems.push(etc[i].electname);
+        let month = this.month[this.nowmonth];
+        let year = this.nowyear;
+        if (this.nowmonth === bmonth && year === byear) {
+          if (countetc === countbilletc) {
+            this.paid = true;
+          } else {
+            this.period = month + " " + (year+543);
+            for (let i = 0, arri = etc.length; i < arri; ++i) {
+              if (electunit._id !== etc[i]._id) {
+                this.electitems.push(etc[i].electname);
+              }
+            }
           }
         }
       }
@@ -153,7 +196,7 @@ export default {
         this.setBillSelect();
       }
       if (this.billselect !== {}) {
-        this.checkPeriod();
+        this.initialBill();
       }
     },
     setBillSelect() {
@@ -171,11 +214,90 @@ export default {
       this.selected = false;
       this.notuse = false;
       this.paid = false;
+      this.billdialog = false;
+      this.savedialog = false;
+      this.ready = false;
+      this.cancel = false;
       this.period = "period";
       this.electitems = [];
       this.electselected = "";
       this.unitelect = "";
       this.billselect = {};
+      this.nowmonth = 0;
+      this.nowyear = 0;
+    },
+    prepareSubmit() {
+      if (this.electselected.length === 0) {
+        alert("กรุณาเลือกหม้อไฟฟ้า");
+        this.$refs["selectelect"].focus();
+      } else if (this.unitelect.length === 0) {
+        alert("กรุณากรอกข้อมูลหน่วยไฟ้า");
+        this.$refs["fillunitelect"].focus();
+      } else {
+        this.savedialog = true;
+      }
+    },
+    initialBill() {
+      let { month: bmonth, year: byear } = this.billselect;
+      let date = new Date();
+      let mindex = date.getMonth();
+      let year = date.getFullYear();
+      this.nowmonth = mindex;
+      this.nowyear = year;
+      if (mindex === bmonth && year === byear) {
+        this.ready = true;
+        this.checkPeriod();
+      } else {
+        this.billdialog = true;
+      }
+    },
+    initailBillSubmit() {
+      let billdata = {
+        waterunit: [],
+        electunit: [],
+        month: this.nowmonth,
+        year: this.nowyear,
+        billstatus: "notpaid",
+        rent: parseFloat(this.contractselect.rent),
+        waterprice: 0,
+        electprice: 0,
+        mulct: 0,
+        totalprice: 0,
+        paid: 0,
+        tenant: this.tenant._id,
+        contract: this.contractselect._id
+      };
+      this.$store.dispatch("createInitialBill", billdata);
+      this.$store.dispatch("updateTenantWithLastBill", this.tenant._id);
+      this.$router.push({ path: "/tenant" });
+    },
+    handleSubmit(data) {
+      this.$store.dispatch("updateBillWithUnit", data);
+      this.$router.push({ path: "/tenant" });
+    },
+    handleCloseBillDialog(result) {
+      this.billdialog = false;
+      result ? this.initailBillSubmit() : (this.cancel = true);
+      this.ready = true;
+    },
+    handleCloseSaveDialog(result) {
+      if (result) {
+        let electdata = {};
+        let { electricity } = this.contractselect;
+        for (let i = 0, arri = electricity.length; i < arri; ++i) {
+          if (electricity[i].electname === this.electselected) {
+            electdata._id = electricity[i]._id;
+            break;
+          }
+        }
+        electdata.value = parseFloat(this.unitelect);
+        let billdata = {
+          ...this.billselect,
+          electunit: [{ ...electdata }]
+        };
+        this.handleSubmit(billdata);
+      }
+      this.savedialog = false;
     }
   }
 };

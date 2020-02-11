@@ -13,6 +13,7 @@
       v-else-if="menuactive===3"
       :contract="tenant.contract"
       :bill="tenant.bill"
+      :tenant="tenant"
     />
     <Water
       v-else-if="menuactive===4"
