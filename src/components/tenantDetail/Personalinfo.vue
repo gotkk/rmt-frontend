@@ -1,5 +1,6 @@
 <template>
   <div id="personalinfo">
+    <DialogUpdateTenant @setResultUpdate="handleSubmitUpdate" :dialogtenant="dialogtenant" :personinfo="personinfo"/>
     <v-form v-if="personinfo">
       <v-container class="cn" v-animate-css="'fadeIn'">
         <v-row>
@@ -25,7 +26,7 @@
         </v-row>
         <v-row>
           <v-col cols="12 text-right">
-            <v-btn color="green accent-4">
+            <v-btn color="green accent-4" @click="dialogtenant=true">
               <v-icon>mdi-pencil-circle-outline</v-icon>
               <span>แก้ไข</span>
             </v-btn>
@@ -37,9 +38,24 @@
 </template>
 
 <script>
+import DialogUpdateTenant from "./tdComponent/DialogUpdateTenant";
 export default {
   name: "Personalinfo",
   props: ["personinfo"],
+  data() {
+    return {
+      dialogtenant: false
+    }
+  },
+  components: {
+    DialogUpdateTenant
+  },
+  methods: {
+    handleSubmitUpdate(result) {
+      console.log(result);
+      this.dialogtenant = false;
+    }
+  }
 };
 </script>
 

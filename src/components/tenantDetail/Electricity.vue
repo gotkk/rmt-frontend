@@ -1,17 +1,9 @@
 <template>
   <div>
-    <v-container>
-      <v-row>
-        <v-col>
-          <DialogInitialBill :initialbill="billdialog" @setCloseBillDialog="handleCloseBillDialog" />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <DialogSaveUnit :saveunit="savedialog" @setCloseSaveDialog="handleCloseSaveDialog" />
-        </v-col>
-      </v-row>
-    </v-container>
+    <DialogInitialBill :initialbill="billdialog" @setCloseBillDialog="handleCloseBillDialog" />
+
+    <DialogSaveUnit :saveunit="savedialog" @setCloseSaveDialog="handleCloseSaveDialog" />
+
     <v-container class="block-cn" v-animate-css="'fadeIn'">
       <v-row>
         <v-col>
@@ -152,8 +144,7 @@ export default {
       nowmonth: 0,
       nowyear: 0,
       electunitrules: [value => !!value || "กรุณากรอกหน่วยไฟฟ้า"],
-      electselectrules: [value => !!value || "กรุณาเลือกหม้อไฟฟ้า"],
-      f: false
+      electselectrules: [value => !!value || "กรุณาเลือกหม้อไฟฟ้า"]
     };
   },
   mounted() {},
@@ -173,10 +164,18 @@ export default {
           if (countetc === countbilletc) {
             this.paid = true;
           } else {
-            this.period = month + " " + (year+543);
-            for (let i = 0, arri = etc.length; i < arri; ++i) {
-              if (electunit._id !== etc[i]._id) {
+            this.period = month + " " + (year + 543);
+            if (electunit.length === 0) {
+              for (let i = 0, arri = etc.length; i < arri; ++i) {
                 this.electitems.push(etc[i].electname);
+              }
+            } else {
+              for (let i = 0, arri = etc.length; i < arri; ++i) {
+                for (let j = 0, arrj = electunit.length; j < arrj; ++j) {
+                  if (etc[i]._id !== electunit[j]._id) {
+                    this.electitems.push(etc[i].electname);
+                  }
+                }
               }
             }
           }
@@ -231,7 +230,7 @@ export default {
         alert("กรุณาเลือกหม้อไฟฟ้า");
         this.$refs["selectelect"].focus();
       } else if (this.unitelect.length === 0) {
-        alert("กรุณากรอกข้อมูลหน่วยไฟ้า");
+        alert("กรุณากรอกข้อมูลหน่วยไฟฟ้า");
         this.$refs["fillunitelect"].focus();
       } else {
         this.savedialog = true;

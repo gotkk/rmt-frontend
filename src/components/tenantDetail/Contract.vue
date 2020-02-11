@@ -1,6 +1,28 @@
 <template>
   <div>
-    <SelectContract :contract="contract" @setContractSelect="handleSelectContract"/>
+    <v-container class="block-cn" v-animate-css="'fadeIn'">
+      <v-row>
+        <v-col>
+          <p class="text-center">จัดการข้อมูลไฟฟ้าเดือนนี้</p>
+        </v-col>
+      </v-row>
+      <SelectContract
+        :contract="contract"
+        @setContractSelect="handleSelectContract"
+        v-if="!selected"
+      />
+
+      <div v-if="selected">
+        <v-row v-animate-css="'fadeInDown'">
+          <v-col>
+            <span>สัญญาเช่า</span>
+          </v-col>
+          <v-col class="d-flex justify-end">
+            <span>{{this.contractselect.name}}</span>
+          </v-col>
+        </v-row>
+      </div>
+    </v-container>
 
     <v-form v-if="selected">
       <v-container class="block-cn" v-animate-css="'fadeIn'">
@@ -62,31 +84,31 @@
 </template>
 
 <script>
-import SelectContract from './tdComponent/SelectContract';
+import SelectContract from "./tdComponent/SelectContract";
 export default {
   name: "Contract",
   props: ["contract"],
-  components:{
+  components: {
     SelectContract
   },
   data() {
     return {
       contractselect: {},
       selected: false
-    }
+    };
   },
   mounted() {},
   methods: {
-    handleSelectContract(value){
-      for(let i = 0, arri = this.contract.length ;i<arri; ++i){
-        if(this.contract[i].name === value){
+    handleSelectContract(value) {
+      for (let i = 0, arri = this.contract.length; i < arri; ++i) {
+        if (this.contract[i].name === value) {
           this.contractselect = this.contract[i];
           this.selected = true;
           break;
         }
       }
     }
-  },
+  }
 };
 </script>
 

@@ -232,6 +232,7 @@ export default {
       ],
       contractselect: {},
       billselect: {},
+      preventbill: {},
       paid: false,
       ready: false,
       ctselected: false,
@@ -256,15 +257,22 @@ export default {
   },
   mounted() {},
   updated() {
+    console.log(this.preventbill);
   },
   methods: {
     checkReady() {
-      let { electunit, waterunit, billstatus, month: bmonth, year: byear } = this.billselect;
+      let {
+        electunit,
+        waterunit,
+        billstatus,
+        month: bmonth,
+        year: byear
+      } = this.billselect;
       let { electricity, water } = this.contractselect;
       let month = this.month[bmonth];
       let eready = false;
       let wready = false;
-      this.period = month + " " + (byear+543);
+      this.period = month + " " + (byear + 543);
       // let date = new Date();
       // let mindex = date.getMonth();
       // let month = this.month[mindex];
@@ -353,29 +361,86 @@ export default {
         i < arri;
         ++i
       ) {
-        let data = {
-          name: this.contractselect.electricity[i].electname,
-          unit: this.billselect.electunit[i].value,
-          ppunit: this.contractselect.electricity[i].electppunit,
-          total:
-            this.billselect.electunit[i].value *
-            this.contractselect.electricity[i].electppunit
-        };
-        this.sumelectprice = this.sumelectprice + data.total;
-        this.electcalcurate = [...this.electcalcurate, data];
+        for (
+          let j = 0, arrj = this.preventbill.electunit.length;
+          j < arrj;
+          ++j
+        ) {
+          if (
+            this.contractselect.electricity[i]._id ===
+            this.preventbill.electunit[j]._id
+          ) {
+            for (
+              let k = 0, arrk = this.billselect.electunit.length;
+              k < arrk;
+              ++k
+            ) {
+              if (
+                this.preventbill.electunit[j]._id ===
+                this.billselect.electunit[k]._id
+              ) {
+                let data = {
+                  name: this.contractselect.electricity[i].electname,
+                  unit:
+                    this.billselect.electunit[k].value -
+                    this.preventbill.electunit[j].value,
+                  ppunit: this.contractselect.electricity[i].electppunit,
+                  total:
+                    (this.billselect.electunit[k].value -
+                      this.preventbill.electunit[j].value) *
+                    this.contractselect.electricity[i].electppunit
+                };
+                this.sumelectprice = this.sumelectprice + data.total;
+                this.electcalcurate = [...this.electcalcurate, data];
+                break;
+              }
+            }
+            break;
+          }
+        }
       }
+
+
       for (let i = 0, arri = this.contractselect.water.length; i < arri; ++i) {
-        let data = {
-          name: this.contractselect.water[i].watername,
-          unit: this.billselect.waterunit[i].value,
-          ppunit: this.contractselect.water[i].waterppunit,
-          total:
-            this.billselect.waterunit[i].value *
-            this.contractselect.water[i].waterppunit
-        };
-        this.sumwaterprice = this.sumwaterprice + data.total;
-        this.watercalculate = [...this.watercalculate, data];
+        for (
+          let j = 0, arrj = this.preventbill.waterunit.length;
+          j < arrj;
+          ++j
+        ) {
+          if (
+            this.contractselect.water[i]._id ===
+            this.preventbill.waterunit[j]._id
+          ) {
+            for (
+              let k = 0, arrk = this.billselect.waterunit.length;
+              k < arrk;
+              ++k
+            ) {
+              if (
+                this.preventbill.waterunit[j]._id ===
+                this.billselect.waterunit[k]._id
+              ) {
+                let data = {
+                  name: this.contractselect.water[i].watername,
+                  unit:
+                    this.billselect.waterunit[k].value -
+                    this.preventbill.waterunit[j].value,
+                  ppunit: this.contractselect.water[i].waterppunit,
+                  total:
+                    (this.billselect.waterunit[k].value -
+                      this.preventbill.waterunit[j].value) *
+                    this.contractselect.water[i].waterppunit
+                };
+                this.sumwaterprice = this.sumwaterprice + data.total;
+                this.watercalculate = [...this.watercalculate, data];
+                break;
+              }
+            }
+            break;
+          }
+        }
       }
+
       this.rental = this.contractselect.rent;
       this.totalallprice =
         parseFloat(this.contractselect.rent) +
@@ -385,6 +450,7 @@ export default {
     },
     setBill() {
       let contractid = this.contractselect._id;
+      let billlistall = [];
       for (let i = 0, arri = this.bill.length; i < arri; ++i) {
         if (
           this.bill[i].contract === contractid &&
@@ -393,7 +459,14 @@ export default {
         ) {
           this.billlist = [...this.billlist, this.bill[i]];
         }
+        if (
+          this.bill[i].contract === contractid &&
+          this.bill[i].billstatus === "paid"
+        ) {
+          billlistall = [...billlistall, this.bill[i]];
+        }
       }
+      this.preventbill = billlistall[billlistall.length - 1];
     },
     resetData() {
       this.electcalcurate = [];
@@ -404,6 +477,7 @@ export default {
       this.swaterunit = [];
       this.billlist = [];
       this.contractselect = {};
+      this.preventbill = {};
       this.billselect = {};
       this.period = "period";
       this.sumelectprice = 0;
