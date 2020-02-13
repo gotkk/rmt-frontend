@@ -20,6 +20,7 @@
       :contract="tenant.contract"
       :water="tenant.contract[0].water"
       :bill="tenant.bill"
+      :tenant="tenant"
     />
   </div>
 </template>

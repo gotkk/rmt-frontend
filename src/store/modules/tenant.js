@@ -12,7 +12,7 @@ const mutations = {
     setTenant(state, tenant) {
         state.tenant = tenant.result;
     },
-    setUpdate(){
+    setUpdate() {
 
     }
 }
@@ -27,8 +27,17 @@ const actions = {
                 console.log(err);
             })
     },
-    updateTenantWithLastBill( { commit },tenantid) {
+    updateTenantWithLastBill({ commit }, tenantid) {
         axios.put(`${process.env.VUE_APP_RWT_BACKEND_APP}tenant/${tenantid}/lastbill`)
+            .then(res => {
+                commit("setUpdate", res.data)
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
+    updateTenant({ commit }, data) {
+        axios.put(`${process.env.VUE_APP_RWT_BACKEND_APP}tenant/${data._id}`, data)
             .then(res => {
                 commit("setUpdate", res.data)
             })

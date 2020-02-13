@@ -1,8 +1,8 @@
 <template>
   <div id="personalinfo">
-    <DialogUpdateTenant @setResultUpdate="handleSubmitUpdate" :dialogtenant="dialogtenant" :personinfo="personinfo"/>
+    <DialogUpdateTenant @setResultUpdate="handleCloseOnUpdate" :dialogtenant="dialogtenant" :personinfo="personinfo"/>
     <v-form v-if="personinfo">
-      <v-container class="cn" v-animate-css="'fadeIn'">
+      <v-container class="block-cn" v-animate-css="'fadeIn'">
         <v-row>
           <v-col cols="12">
             <p class="font-weight-bold text-center">รายละเอียดผู้เช่า</p>
@@ -51,8 +51,7 @@ export default {
     DialogUpdateTenant
   },
   methods: {
-    handleSubmitUpdate(result) {
-      console.log(result);
+    handleCloseOnUpdate() {
       this.dialogtenant = false;
     }
   }
@@ -60,14 +59,4 @@ export default {
 </script>
 
 <style scoped>
-.cn {
-  /* background-color: orange; */
-  margin-top: 16px;
-  border-radius: 16px;
-  border-width: 2px;
-  /* border-color: red; */
-  border-style: solid;
-  box-shadow: 0 4px 8px 0 rgba(255, 255, 255, 0.2),
-    0 6px 20px 0 rgba(255, 255, 255, 0.19);
-}
 </style>

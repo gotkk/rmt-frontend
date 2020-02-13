@@ -1,7 +1,7 @@
 <template>
   <div>
-    <DialogInitialBill :initialbill="billdialog" @setCloseBillDialog="handleCloseBillDialog" />
-    <DialogSaveUnit :saveunit="savedialog" @setCloseSaveDialog="handleCloseSaveDialog" />
+    <DialogConfirm :confirm="billdialog" @colseConfirm="handleCloseBillDialog" :title="ib_title" :text="ib_txt"/>
+    <DialogConfirm :confirm="savedialog" @colseConfirm="handleCloseSaveDialog" :title="su_title" :text="su_txt" />
     <v-container class="block-cn" v-animate-css="'fadeIn'">
       <v-row>
         <v-col>
@@ -98,16 +98,14 @@
 
 <script>
 import SelectContract from "./tdComponent/SelectContract";
-import DialogInitialBill from "./tdComponent/DialogInitialBill";
-import DialogSaveUnit from "./tdComponent/DialogSaveUnit";
+import DialogConfirm from "./tdComponent/DialogConfirm";
 
 export default {
   name: "Electronic",
-  props: ["bill", "contract"],
+  props: ["bill", "contract", "tenant"],
   components: {
     SelectContract,
-    DialogInitialBill,
-    DialogSaveUnit
+    DialogConfirm
   },
   data() {
     return {
@@ -141,7 +139,11 @@ export default {
       nowmonth: 0,
       nowyear: 0,
       waterunitrules: [value => !!value || "กรุณากรอกหน่วยน้ำประปา"],
-      waterselectrules: [value => !!value || "กรุณาเลือกหม้อน้ำประปา"]
+      waterselectrules: [value => !!value || "กรุณาเลือกหม้อน้ำประปา"],
+            ib_title: "เริ่มบิลเดือนใหม่เลยหรือไม่",
+      ib_txt: "นี่เป็นการเริ่มต้นเปิดบิลในรอบเดือนปัจจุบัน เพื่อทำให้สามารถบันทึกข้อมูลน้ำประปาได้",
+      su_title: "ต้องการบันทึกข้อมูลหรือไม่",
+      su_txt: "เมื่อทำการบันทึกข้อมูลแล้ว จะไม่สามารถดำเนินการแก้ไขหน่วยน้ำประปาได้"
     };
   },
   mounted() {},
