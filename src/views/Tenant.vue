@@ -9,7 +9,7 @@
       </v-row>
       <v-row>
         <v-col cols="12">
-          <TnTable :tenant="$store.getters.tenant" @handleAdd="handleAdd"/>
+          <TenTable :tenant="$store.getters.tenant" @handleAdd="handleAdd"/>
         </v-col>
       </v-row>
     </v-container>
@@ -17,13 +17,13 @@
 </template>
 
 <script>
-import TnTable from "../components/tenant/TnTable";
+import TenTable from "../components/tenant/TenTable";
 import DialogAddTenant from "../components/tenant/tnComponent/DialogAddTenant"
 
 export default {
   name: "Tenant",
   components: {
-    TnTable,
+    TenTable,
     DialogAddTenant
   },
   data() {

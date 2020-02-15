@@ -16,6 +16,9 @@ const mutations = {
     },
     setUpdateBillUnit(){
 
+    },
+    setBill(state, bill){
+        state.bill = bill.result
     }
 }
 
@@ -24,6 +27,15 @@ const actions = {
         axios.post(`${process.env.VUE_APP_RWT_BACKEND_APP}bill/initialbill`, billdata)
             .then(res => {
                 commit("setBillId", res.data)
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
+    getAllBill({ commit }) {
+        axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}bill`)
+            .then(res => {
+                commit("setBill", res.data)
             })
             .catch(err => {
                 console.log(err);

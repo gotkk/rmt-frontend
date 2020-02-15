@@ -36,8 +36,6 @@ export default {
       headers: [
         { text: "รหัสสัญญาเช่า", value: "_id" },
         { text: "ชื่อสัญญาเช่า", value: "name" },
-        { text: "รายละเอียดเช่า", value: "detail" },
-        { text: "ระยะเวลาเช่า", value: "duration" },
         { text: "ค่ามัดจำ", value: "deposit" },
         { text: "วันเริ่ม", value: "start" },
         { text: "วันสิ้นสุด", value: "end" },

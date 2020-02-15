@@ -28,7 +28,7 @@
 <script>
 import DialogAddTenant from "./tnComponent/DialogAddTenant";
 export default {
-  name: "TnTable",
+  name: "TenTable",
   comments: {
     DialogAddTenant
   },

@@ -208,7 +208,10 @@ export default {
       this.elect = this.$store.getters.electricity;
       this.water = this.$store.getters.water;
       for (let i = 0, arri = this.tenant.length; i < arri; ++i) {
-        this.tenantitems = [...this.tenantitems, `${this.tenant[i].firstname}-${this.tenant[i].lastname}`];
+        this.tenantitems = [
+          ...this.tenantitems,
+          `${this.tenant[i].firstname}-${this.tenant[i].lastname}`
+        ];
       }
       for (let i = 0, arri = this.land.length; i < arri; ++i) {
         this.landitems = [...this.landitems, this.land[i].landname];
@@ -226,7 +229,10 @@ export default {
       let firstname = fullname[0];
       let lastname = fullname[1];
       for (let j = 0, arrj = this.tenant.length; j < arrj; ++j) {
-        if (firstname === this.tenant[j].firstname && lastname === this.tenant[j].lastname) {
+        if (
+          firstname === this.tenant[j].firstname &&
+          lastname === this.tenant[j].lastname
+        ) {
           idtenanttemp = [...idtenanttemp, this.tenant[j]._id];
           break;
         }
@@ -278,10 +284,10 @@ export default {
         return false;
       } else {
         return true;
-      } 
+      }
     },
     preSubmitAdd() {
-      let newtenant = this.tenantselected ? this.getIdFromNameofTenant(): [];
+      let newtenant = this.tenantselected ? this.getIdFromNameofTenant() : [];
       let newland = this.getIdFromNameofLand();
       let newelect = this.getIdFromNameofElectricity();
       let newwater = this.getIdFromNameofWater();
@@ -311,8 +317,7 @@ export default {
       res ? this.handleSubmitAdd() : (this.confirm = false);
     },
     handleSubmitAdd() {
-      console.log(this.data_add)
-      //   this.$store.dispatch("createWater", this.data_add);
+      this.$store.dispatch("createContract", this.data_add);
       this.confirm = false;
       this.handleCloseDialog();
     },
