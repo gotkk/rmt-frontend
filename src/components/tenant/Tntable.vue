@@ -1,8 +1,9 @@
 <template>
-  <!-- <v-data-table :headers="headers" :items="desserts" :items-per-page="10" class="elevation-1" @click:row="selectTenant(desserts[index].fname)"></v-data-table> -->
   <v-card v-animate-css="'fadeIn'">
     <v-card-title>
-      ผู้เช่า
+      <v-btn rounded color="primary" dark @click="handleAdd()">
+        <v-icon>mdi-plus-circle</v-icon>เพิ่มผู้เช่า
+      </v-btn>
       <v-spacer></v-spacer>
       <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
     </v-card-title>
@@ -25,13 +26,13 @@
 </template>
 
 <script>
+import DialogAddTenant from "./tnComponent/DialogAddTenant";
 export default {
   name: "TnTable",
-  methods: {
-    handleSelect(tenant) {
-      this.$router.push({ path: `/tenant/${tenant._id}` });
-    }
+  comments: {
+    DialogAddTenant
   },
+  props: ["tenant"],
   data() {
     return {
       selected: [],
@@ -42,11 +43,22 @@ export default {
         { text: "นามสกุล", value: "lastname" },
         { text: "ชื่อเล่น", value: "nickname" },
         { text: "เบอร์โทร", value: "tel" },
-        { text: "สถานะเช่า", value: "tenantstatus" }
-      ]
+        {
+          text: "สถานะเช่า",
+          value: "contract[0].ctstatus"
+        }
+      ],
+      ctstatus: []
     };
   },
-  props: ["tenant"]
+  methods: {
+    handleSelect(tenant) {
+      this.$router.push({ path: `/tenant/${tenant._id}` });
+    },
+    handleAdd() {
+      this.$emit("handleAdd");
+    }
+  }
 };
 </script>
 

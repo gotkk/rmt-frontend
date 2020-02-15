@@ -1,7 +1,9 @@
 <template>
   <v-card v-animate-css="'fadeIn'">
     <v-card-title>
-      ที่ดิน
+      <v-btn rounded color="primary" dark @click="handleAdd()">
+        <v-icon>mdi-plus-circle</v-icon>เพิ่มที่ดิน
+      </v-btn>
       <v-spacer></v-spacer>
       <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
     </v-card-title>
@@ -26,11 +28,7 @@
 <script>
 export default {
   name: "LnTable",
-  methods: {
-    handleSelect(data) {
-      this.$router.push({ path: `/land/${data._id}` });
-    }
-  },
+  props: ["land"],
   data() {
     return {
       selected: [],
@@ -39,11 +37,18 @@ export default {
         { text: "รหัสที่ดิน", value: "_id" },
         { text: "ชื่อที่ดิน", value: "landname" },
         { text: "เนื้อที่", value: "landarea" },
-        { text: "สถานะการเช่า", value: "landstatus" },
+        { text: "สถานะการเช่า", value: "landstatus" }
       ]
     };
   },
-  props: ["land"]
+  methods: {
+    handleSelect(data) {
+      this.$router.push({ path: `/land/${data._id}` });
+    },
+    handleAdd() {
+      this.$emit("handleAdd");
+    }
+  }
 };
 </script>
 

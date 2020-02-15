@@ -11,10 +11,22 @@ const getters = {
 const mutations = {
     setElectricity(state, electricity){
         state.electricity = electricity.result;
+    },
+    setCreate(){
+        
     }
 }
 
 const actions = {
+    createElectricity({ commit }, data) {
+        axios.post(`${process.env.VUE_APP_RWT_BACKEND_APP}electricity`, data)
+            .then(res => {
+                commit("setCreate", res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
     getAllElectricity({commit}){
         axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}electricity`)
         .then(res => {

@@ -1,7 +1,9 @@
 <template>
   <v-card v-animate-css="'fadeIn'">
     <v-card-title>
-      หม้อไฟฟ้า
+      <v-btn rounded color="primary" dark @click="handleAdd()">
+        <v-icon>mdi-plus-circle</v-icon>เพิ่มไฟฟ้า
+      </v-btn>
       <v-spacer></v-spacer>
       <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
     </v-card-title>
@@ -26,11 +28,7 @@
 <script>
 export default {
   name: "EtcTable",
-  methods: {
-    handleSelect(data) {
-      this.$router.push({ path: `/electricity/${data._id}` });
-    }
-  },
+  props: ["electricity"],
   data() {
     return {
       selected: [],
@@ -39,11 +37,18 @@ export default {
         { text: "รหัสไฟฟ้า", value: "_id" },
         { text: "ชื่อไฟฟ้า", value: "electname" },
         { text: "ราคาไฟฟ้าต่อหน่วย", value: "electppunit" },
-        { text: "สถานะการใช้งานไฟฟ้า", value: "electstatus" },
+        { text: "สถานะการใช้งานไฟฟ้า", value: "electstatus" }
       ]
     };
   },
-  props: ["electricity"]
+  methods: {
+    handleSelect(data) {
+      this.$router.push({ path: `/electricity/${data._id}` });
+    },
+    handleAdd() {
+      this.$emit("handleAdd");
+    }
+  }
 };
 </script>
 

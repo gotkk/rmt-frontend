@@ -1,7 +1,9 @@
 <template>
   <v-card v-animate-css="'fadeIn'">
     <v-card-title>
-      หม้อน้ำประปา
+      <v-btn rounded color="primary" dark @click="handleAdd()">
+        <v-icon>mdi-plus-circle</v-icon>เพิ่มน้ำประปา
+      </v-btn>
       <v-spacer></v-spacer>
       <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
     </v-card-title>
@@ -26,11 +28,7 @@
 <script>
 export default {
   name: "WtTable",
-  methods: {
-    handleSelect(data) {
-      this.$router.push({ path: `/water/${data._id}` });
-    }
-  },
+  props: ["water"],
   data() {
     return {
       selected: [],
@@ -39,11 +37,18 @@ export default {
         { text: "รหัสน้ำประปา", value: "_id" },
         { text: "ชื่อน้ำประปา", value: "watername" },
         { text: "ราคาน้ำต่อหน่วย", value: "waterppunit" },
-        { text: "สถานะการใช้น้ำ", value: "waterstatus" },
+        { text: "สถานะการใช้น้ำ", value: "waterstatus" }
       ]
     };
   },
-  props: ["water"],
+  methods: {
+    handleSelect(data) {
+      this.$router.push({ path: `/water/${data._id}` });
+    },
+    handleAdd() {
+      this.$emit("handleAdd");
+    }
+  }
 };
 </script>
 

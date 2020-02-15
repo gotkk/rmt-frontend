@@ -1,7 +1,9 @@
 <template>
   <v-card v-animate-css="'fadeIn'">
     <v-card-title>
-      สัญญาเช่า
+      <v-btn rounded color="primary" dark @click="handleAdd()">
+        <v-icon>mdi-plus-circle</v-icon>เพิ่มสัญญาเช่า
+      </v-btn>
       <v-spacer></v-spacer>
       <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
     </v-card-title>
@@ -26,11 +28,7 @@
 <script>
 export default {
   name: "CtTable",
-  methods: {
-    handleSelect(data) {
-      this.$router.push({ path: `/contract/${data._id}` });
-    }
-  },
+  props: ["contract"],
   data() {
     return {
       selected: [],
@@ -48,7 +46,14 @@ export default {
       ]
     };
   },
-  props: ["contract"]
+  methods: {
+    handleSelect(data) {
+      this.$router.push({ path: `/contract/${data._id}` });
+    },
+    handleAdd() {
+      this.$emit("handleAdd");
+    }
+  }
 };
 </script>
 

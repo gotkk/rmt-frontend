@@ -1,6 +1,6 @@
 <template>
   <div id="dialogconfirm">
-    <v-dialog v-model="confirm" persistent max-width="360">
+    <v-dialog v-model="confirm" persistent max-width="400">
       <v-card>
         <v-card-title class="headline">{{title}} ?</v-card-title>
         <v-card-text>{{text}}</v-card-text>
