@@ -9,6 +9,7 @@ import Electricity from '@/views/Electricity.vue'
 import Water from '@/views/Water.vue'
 import Contract from '../views/Contract.vue'
 import Bill from '../views/Bill.vue'
+import ContractDetail from '../views/ContractDetail.vue'
 
 Vue.use(VueRouter)
 
@@ -60,6 +61,11 @@ const routes = [
     path: '/contract',
     name: 'contract',
     component: Contract,
+  },
+  {
+    path: '/contract/:id',
+    name: 'contractDetail',
+    component: ContractDetail,
   },
   {
     path: '/bill',

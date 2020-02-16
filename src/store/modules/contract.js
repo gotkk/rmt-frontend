@@ -14,6 +14,9 @@ const mutations = {
     },
     setCreate(){
 
+    },
+    setUpdate(){
+
     }
 }
 
@@ -22,6 +25,15 @@ const actions = {
         axios.post(`${process.env.VUE_APP_RWT_BACKEND_APP}contract`, data)
             .then(res => {
                 commit("setCreate", res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
+    updateContract({ commit }, data) {
+        axios.put(`${process.env.VUE_APP_RWT_BACKEND_APP}contract/${data._id}`, data)
+            .then(res => {
+                commit("setUpdate", res.data);
             })
             .catch(err => {
                 console.log(err);

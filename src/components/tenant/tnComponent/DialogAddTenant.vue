@@ -17,7 +17,7 @@
               <v-col cols="6">
                 <v-text-field
                   v-model="personalform.firstname"
-                  label="Firstname"
+                  label="ชื่อ"
                   :rules="datarule"
                   ref="fname"
                 ></v-text-field>
@@ -25,7 +25,7 @@
               <v-col cols="6">
                 <v-text-field
                   v-model="personalform.lastname"
-                  label="Lastname"
+                  label="นามสกุล"
                   :rules="datarule"
                   ref="lname"
                 ></v-text-field>
@@ -35,7 +35,7 @@
               <v-col cols="6">
                 <v-text-field
                   v-model="personalform.nickname"
-                  label="Nickname"
+                  label="ชื่อเล่น"
                   :rules="datarule"
                   ref="nname"
                 ></v-text-field>
@@ -43,7 +43,7 @@
               <v-col cols="6">
                 <v-text-field
                   v-model="personalform.tel"
-                  label="Telephone"
+                  label="เบอร์โทร"
                   :rules="datarule"
                   ref="tel"
                 ></v-text-field>

@@ -1,7 +1,17 @@
 <template>
   <div>
-    <DialogConfirm :confirm="billdialog" @colseConfirm="handleCloseBillDialog" :title="ib_title" :text="ib_txt"/>
-    <DialogConfirm :confirm="savedialog" @colseConfirm="handleCloseSaveDialog" :title="su_title" :text="su_txt" />
+    <DialogConfirm
+      :confirm="billdialog"
+      @colseConfirm="handleCloseBillDialog"
+      :title="ib_title"
+      :text="ib_txt"
+    />
+    <DialogConfirm
+      :confirm="savedialog"
+      @colseConfirm="handleCloseSaveDialog"
+      :title="su_title"
+      :text="su_txt"
+    />
     <v-container class="block-cn" v-animate-css="'fadeIn'">
       <v-row>
         <v-col>
@@ -140,17 +150,24 @@ export default {
       nowyear: 0,
       waterunitrules: [value => !!value || "กรุณากรอกหน่วยน้ำประปา"],
       waterselectrules: [value => !!value || "กรุณาเลือกหม้อน้ำประปา"],
-            ib_title: "เริ่มบิลเดือนใหม่เลยหรือไม่",
-      ib_txt: "นี่เป็นการเริ่มต้นเปิดบิลในรอบเดือนปัจจุบัน เพื่อทำให้สามารถบันทึกข้อมูลน้ำประปาได้",
+      ib_title: "เริ่มบิลเดือนใหม่เลยหรือไม่",
+      ib_txt:
+        "นี่เป็นการเริ่มต้นเปิดบิลในรอบเดือนปัจจุบัน เพื่อทำให้สามารถบันทึกข้อมูลน้ำประปาได้",
       su_title: "ต้องการบันทึกข้อมูลหรือไม่",
-      su_txt: "เมื่อทำการบันทึกข้อมูลแล้ว จะไม่สามารถดำเนินการแก้ไขหน่วยน้ำประปาได้"
+      su_txt:
+        "เมื่อทำการบันทึกข้อมูลแล้ว จะไม่สามารถดำเนินการแก้ไขหน่วยน้ำประปาได้"
     };
   },
   mounted() {},
   methods: {
     checkPeriod() {
       let { water: wat } = this.contractselect;
-      let { waterunit, month: bmonth, year: byear } = this.billselect;
+      let { waterunit, period } = this.billselect;
+
+      let fullperiod = period.split("-");
+      let bmonth = parseFloat(fullperiod[1]);
+      let byear = parseFloat(fullperiod[0]);
+
       let countwat = wat.length;
       let countbillwat = waterunit.length;
       if (countwat === 0) {
@@ -235,12 +252,16 @@ export default {
       }
     },
     initialBill() {
-      let { month: bmonth, year: byear } = this.billselect;
       let date = new Date();
       let mindex = date.getMonth();
       let year = date.getFullYear();
       this.nowmonth = mindex;
       this.nowyear = year;
+
+      let { period } = this.billselect;
+      let fullperiod = period.split("-");
+      let bmonth = parseFloat(fullperiod[1]);
+      let byear = parseFloat(fullperiod[0]);
       if (mindex === bmonth && year === byear) {
         this.ready = true;
         this.checkPeriod();
