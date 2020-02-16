@@ -94,7 +94,8 @@ export default {
       landitems: [],
       land: [],
       confirm: false,
-      electstatus: false
+      electstatus: false,
+      inited: false
     };
   },
   mounted() {
@@ -102,7 +103,7 @@ export default {
     this.$store.dispatch("getAllLand");
   },
   updated() {
-    if (this.contractitems.length === 0) {
+    if (!this.inited) {
       this.initialForm();
     }
   },
@@ -116,6 +117,7 @@ export default {
       for (let i = 0, arri = this.land.length; i < arri; ++i) {
         this.landitems = [...this.landitems, this.land[i].landname];
       }
+      this.inited = true;
     },
     getIdFromNameofContract() {
       let idcontracttemp = [];
@@ -151,7 +153,7 @@ export default {
     preSubmitAdd() {
       let newcontract = this.getIdFromNameofContract();
       let newland = this.getIdFromNameofLand();
-      let newppunit = parseFloat(this.electform.electppunit)
+      let newppunit = parseFloat(this.electform.electppunit);
       let data_add = {
         electstatus: this.electstatus,
         ...this.electform,

@@ -48,9 +48,11 @@ export default {
   methods: {
     initialBill() {
       for (let i = 0, arri = this.billlist.length; i < arri; ++i) {
-        this.billnamelist.push(this.month[this.billlist[i].month]);
+        let fullperiod = this.billlist[i].period.split("-");
+        let monthindex = fullperiod[1];
+        this.billnamelist.push(this.month[monthindex]);
       }
-      if(this.billnamelist.length === 0){
+      if (this.billnamelist.length === 0) {
         this.$emit("setNotReady");
       }
     }

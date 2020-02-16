@@ -273,11 +273,11 @@ export default {
       }
     },
     initailBillSubmit() {
+      let period = `${this.nowyear}-${this.nowmonth}`;
       let billdata = {
         waterunit: [],
         electunit: [],
-        month: this.nowmonth,
-        year: this.nowyear,
+        period: period,
         billstatus: "notpaid",
         rent: parseFloat(this.contractselect.rent),
         waterprice: 0,

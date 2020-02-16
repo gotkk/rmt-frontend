@@ -33,7 +33,7 @@
             <span>เลือกงวดค่าเช่า (เดือน)</span>
           </v-col>
           <v-col class="d-flex justify-end">
-            <span>{{this.month[this.billselect.month]}}</span>
+            <span>{{this.month[indexmonth]}}</span>
           </v-col>
         </v-row>
       </div>
@@ -50,7 +50,7 @@
           <p>ประจำเดือน</p>
         </v-col>
         <v-col>
-          <p class="text-right">{{period}}</p>
+          <p class="text-right">{{this.month[indexmonth]}}</p>
         </v-col>
       </v-row>
       <hr dash />
@@ -252,27 +252,23 @@ export default {
       sumwaterprice: 0,
       totalallprice: 0,
       rental: 0,
-      mulct: 0
+      mulct: 0,
+      indexmonth: 0
     };
   },
   mounted() {},
-  updated() {
-    console.log(this.preventbill);
-  },
+  updated() {},
   methods: {
     checkReady() {
       let {
         electunit,
         waterunit,
         billstatus,
-        month: bmonth,
-        year: byear
       } = this.billselect;
       let { electricity, water } = this.contractselect;
-      let month = this.month[bmonth];
       let eready = false;
       let wready = false;
-      this.period = month + " " + (byear + 543);
+      this.period = this.billselect.period;
       // let date = new Date();
       // let mindex = date.getMonth();
       // let month = this.month[mindex];
@@ -323,7 +319,9 @@ export default {
     handleSelectBill(value) {
       let monthselect = this.month.indexOf(value);
       for (let i = 0, arri = this.billlist.length; i < arri; ++i) {
-        if (this.billlist[i].month === monthselect) {
+        let m = this.billlist[i].period.split("-");
+        m[1] = parseFloat(m[1]);
+        if (m[1] === monthselect) {
           this.billselect = this.billlist[i];
           this.blselected = true;
           break;
@@ -343,7 +341,10 @@ export default {
     },
     calculateMulct() {
       let { rent: r } = this.contractselect;
-      let { month: m } = this.billselect;
+      let { period } = this.billselect;
+      let splitperiod = period.split("-");
+      let m = parseFloat(splitperiod[1]);
+      this.indexmonth = m;
       let date = new Date();
       let rent = parseFloat(r);
       let month = date.getMonth();
@@ -399,7 +400,6 @@ export default {
           }
         }
       }
-
 
       for (let i = 0, arri = this.contractselect.water.length; i < arri; ++i) {
         for (

@@ -106,7 +106,8 @@ export default {
       wateritems: [],
       water: [],
       confirm: false,
-      landstatus: false
+      landstatus: false,
+      inited: false
     };
   },
   mounted() {
@@ -115,7 +116,7 @@ export default {
     this.$store.dispatch("getAllWater");
   },
   updated() {
-    if (this.contractitems.length === 0) {
+    if (!this.inited) {
       this.initialForm();
     }
   },
@@ -133,6 +134,7 @@ export default {
       for (let i = 0, arri = this.water.length; i < arri; ++i) {
         this.wateritems = [...this.wateritems, this.water[i].watername];
       }
+      this.inited = true;
     },
     getIdFromNameofContract() {
       let idcontracttemp = [];
@@ -184,7 +186,7 @@ export default {
         ...this.landform,
         contract: newcontract,
         electricity: newelect,
-        water: newwater,
+        water: newwater
       };
       this.validateData(data_add)
         ? this.checkConfirm(data_add)

@@ -94,13 +94,14 @@ export default {
       contractitems: [],
       contract: [],
       confirm: false,
+      inited: false
     };
   },
   mounted() {
     this.$store.dispatch("getAllContract");
   },
   updated() {
-     if (this.contractitems.length === 0) {
+    if (!this.inited) {
       this.initialForm();
     }
   },
@@ -117,6 +118,7 @@ export default {
         ];
       }
       this.contract = this.$store.getters.contract;
+      this.inited = true;
     },
     getIdFromNameofContract() {
       let idcontracttemp = [];
@@ -149,7 +151,12 @@ export default {
     },
     preSubmitAdd() {
       let newcontract = this.getIdFromNameofContract();
-      let newtel = this.personalform.tel && this.personalform.tel.toString().split(",").map((item) => item.trim());
+      let newtel =
+        this.personalform.tel &&
+        this.personalform.tel
+          .toString()
+          .split(",")
+          .map(item => item.trim());
       let data_add = {
         ...this.personalform,
         contract: newcontract,

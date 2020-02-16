@@ -3,7 +3,7 @@
     <v-container class="block-cn" v-animate-css="'fadeIn'">
       <v-row>
         <v-col>
-          <p class="text-center">จัดการข้อมูลไฟฟ้าเดือนนี้</p>
+          <p class="text-center">จัดการสัญญา</p>
         </v-col>
       </v-row>
       <SelectContract

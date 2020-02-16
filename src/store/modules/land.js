@@ -14,6 +14,9 @@ const mutations = {
     },
     setCreate(){
         
+    },
+    setUpdate(){
+        
     }
 }
 
@@ -35,7 +38,16 @@ const actions = {
         .catch(err => {
             console.log(err);
         })
-    }
+    },
+    updateLand({ commit }, data) {
+        axios.put(`${process.env.VUE_APP_RWT_BACKEND_APP}land/${data._id}`, data)
+            .then(res => {
+                commit("setUpdate", res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
 }
 
 export default {

@@ -10,6 +10,9 @@ import Water from '@/views/Water.vue'
 import Contract from '../views/Contract.vue'
 import Bill from '../views/Bill.vue'
 import ContractDetail from '../views/ContractDetail.vue'
+import LandDetail from '../views/LandDetail.vue'
+import ElectricityDetail from '../views/ElectricityDetail.vue'
+import WaterDetail from '../views/WaterDetail.vue'
 
 Vue.use(VueRouter)
 
@@ -48,14 +51,29 @@ const routes = [
     component: Land,
   },
   {
+    path: '/land/:id',
+    name: 'landDetail',
+    component: LandDetail,
+  },
+  {
     path: '/electricity',
     name: 'electricity',
     component: Electricity,
   },
   {
+    path: '/electricity/:id',
+    name: 'electricityDetail',
+    component: ElectricityDetail,
+  },
+  {
     path: '/water',
     name: 'water',
     component: Water,
+  },
+  {
+    path: '/water/:id',
+    name: 'waterDetail',
+    component: WaterDetail,
   },
   {
     path: '/contract',

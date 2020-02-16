@@ -145,6 +145,7 @@
             <v-select
               v-model="electselected"
               :items="electitems"
+              multiple
               label="เลือกหม้อไฟฟ้า"
               color="light-blue darken-2"
               :disabled="disabled.elect"
@@ -155,6 +156,7 @@
             <v-select
               v-model="waterselected"
               :items="wateritems"
+              multiple
               label="เลือกหม้อน้ำประปา"
               color="light-blue darken-2"
               :disabled="disabled.water"
@@ -189,7 +191,6 @@ export default {
   },
   data() {
     return {
-      dialogtenant: false,
       contract_update: {},
       tenantselected: "",
       tenantitems: [],
@@ -197,10 +198,10 @@ export default {
       landselected: "",
       landitems: [],
       land: [],
-      electselected: "",
+      electselected: [],
       electitems: [],
       elect: [],
-      waterselected: "",
+      waterselected: [],
       wateritems: [],
       water: [],
       startdate: new Date().toISOString().substr(0, 10),
@@ -225,7 +226,8 @@ export default {
         tenant: true,
         land: true,
         elect: true,
-        water: true
+        water: true,
+        inited: false
       }
     };
   },
@@ -236,14 +238,11 @@ export default {
     this.$store.dispatch("getAllWater");
   },
   updated() {
-    if (this.tenant.length === 0) {
+    if (!this.inited) {
       this.initialForm();
     }
   },
   methods: {
-    handleCloseOnUpdate() {
-      this.dialogtenant = false;
-    },
     initialForm() {
       this.tenant = this.$store.getters.tenant;
       this.land = this.$store.getters.land;
@@ -265,11 +264,19 @@ export default {
         this.wateritems = [...this.wateritems, this.water[i].watername];
       }
       let { tenant, land, electricity, water } = this.contractinfo;
-      this.tenantselected = tenant.length !== 0 ? `${tenant[0].firstname}-${tenant[0].lastname}`: "";
-      this.landselected = land.length !== 0 ? land[0].landname: "";
-      this.electselected = electricity.length !== 0 ? electricity[0].electname: "";
-      this.waterselected = water.length !== 0 ? water[0].watername : "";
+      this.tenantselected =
+        tenant.length !== 0
+          ? `${tenant[0].firstname}-${tenant[0].lastname}`
+          : "";
+      this.landselected = land.length !== 0 ? land[0].landname : "";
+      for (let i = 0, arri = electricity.length; i < arri; ++i) {
+        this.electselected = [...this.electselected, electricity[i].electname];
+      }
+      for (let i = 0, arri = water.length; i < arri; ++i) {
+        this.waterselected = [...this.waterselected, water[i].watername];
+      }
       this.contract_update = { ...this.contractinfo };
+      this.inited = true;
     },
     handleEditContract() {
       for (let prop in this.disabled) {
@@ -288,7 +295,7 @@ export default {
       this.confirm = false;
     },
     handleResConfirm2(result) {
-      result ? this.handleSubmitUpdate() : this.confirm2 = false;
+      result ? this.handleSubmitUpdate() : (this.confirm2 = false);
     },
     getIdFromNameofTenant() {
       let idtenanttemp = [];
@@ -370,13 +377,13 @@ export default {
         water: newwater
       };
       this.validateData(this.contract_update)
-        ? this.confirm2 = true
+        ? (this.confirm2 = true)
         : alert("กรุณากรอข้อมูลให้ครบถ้วน");
     },
-    handleSubmitUpdate(){
+    handleSubmitUpdate() {
       this.$store.dispatch("updateContract", this.contract_update);
       this.confirm2 = false;
-      this.$router.push({path: "/contract"});
+      this.$router.push({ path: "/contract" });
     }
   }
 };

@@ -1,6 +1,11 @@
 <template>
   <div>
-    <DialogConfirm :confirm="confirm" @colseConfirm="handleResConfirm" :title="c_title" :text="c_txt"/>
+    <DialogConfirm
+      :confirm="confirm"
+      @colseConfirm="handleResConfirm"
+      :title="c_title"
+      :text="c_txt"
+    />
     <v-dialog v-model="dialogtenant" persistent max-width="600px">
       <v-card>
         <v-card-title>
@@ -88,38 +93,39 @@ export default {
       confirm: false,
       c_title: "ต้องการอัพเดตข้อมูลหรือไม่",
       c_txt: "นี่เป็นบันทึกข้อมูลการแก้ไขข้อมูลผู้เช่า",
-      data_update: {}
+      data_update: {},
+      inited: false
     };
   },
   mounted() {
     this.$store.dispatch("getAllContract");
-
   },
   updated() {
-    if (this.contractitems.length === 0) {
+    if (!this.inited) {
       this.initialForm();
     }
   },
   methods: {
     initialForm() {
       this.personalform = { ...this.personinfo };
-      for (let i = 0, arri = this.personinfo.contract.length; i < arri; ++i) {
-        this.contractselected = [
-          ...this.contractselected,
-          this.personinfo.contract[i].name
-        ];
-      }
-      for (
-        let i = 0, arri = this.$store.getters.contract.length;
-        i < arri;
-        ++i
-      ) {
-        this.contractitems = [
-          ...this.contractitems,
-          this.$store.getters.contract[i].name
-        ];
-      }
+          for (let i = 0, arri = this.personinfo.contract.length; i < arri; ++i) {
+              this.contractselected = [
+                  ...this.contractselected,
+            this.personinfo.contract[i].name
+          ];
+        }
+        for (
+            let i = 0, arri = this.$store.getters.contract.length;
+          i < arri;
+          ++i
+        ) {
+            this.contractitems = [
+                ...this.contractitems,
+            this.$store.getters.contract[i].name
+          ];
+        }
       this.contract = this.$store.getters.contract;
+      this.inited = true;
     },
     getIdFromNameofContract() {
       let idcontracttemp = [];

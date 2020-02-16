@@ -46,16 +46,16 @@ export default {
         icon: "mdi-account",
         title: "ผู้เช่า"
       },
-      {
-        path: "/alert",
-        icon: "mdi-clock-alert",
-        title: "แจ้งเตือน"
-      },
-      {
-        path: "/management",
-        icon: "mdi-google-keep",
-        title: "การจัดการ"
-      },
+      // {
+      //   path: "/alert",
+      //   icon: "mdi-clock-alert",
+      //   title: "แจ้งเตือน"
+      // },
+      // {
+      //   path: "/management",
+      //   icon: "mdi-google-keep",
+      //   title: "การจัดการ"
+      // },
       {
         path: "/contract",
         icon: "mdi-clipboard-text",

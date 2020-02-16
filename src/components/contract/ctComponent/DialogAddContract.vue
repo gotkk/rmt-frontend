@@ -130,6 +130,7 @@
                 <v-select
                   v-model="electselected"
                   :items="electitems"
+                  multiple
                   label="เลือกหม้อไฟฟ้า"
                   color="light-blue darken-2"
                 ></v-select>
@@ -138,6 +139,7 @@
                 <v-select
                   v-model="waterselected"
                   :items="wateritems"
+                  multiple
                   label="เลือกหม้อน้ำประปา"
                   color="light-blue darken-2"
                 ></v-select>
@@ -187,7 +189,8 @@ export default {
       startdate: new Date().toISOString().substr(0, 10),
       startmodal: false,
       enddate: new Date().toISOString().substr(0, 10),
-      endmodal: false
+      endmodal: false,
+      inited: false
     };
   },
   mounted() {
@@ -197,7 +200,7 @@ export default {
     this.$store.dispatch("getAllWater");
   },
   updated() {
-    if (this.tenant.length === 0) {
+    if (!this.inited) {
       this.initialForm();
     }
   },
@@ -222,6 +225,7 @@ export default {
       for (let i = 0, arri = this.water.length; i < arri; ++i) {
         this.wateritems = [...this.wateritems, this.water[i].watername];
       }
+      this.inited = true;
     },
     getIdFromNameofTenant() {
       let idtenanttemp = [];
@@ -251,20 +255,24 @@ export default {
     },
     getIdFromNameofElectricity() {
       let idelecttemp = [];
-      for (let j = 0, arrj = this.elect.length; j < arrj; ++j) {
-        if (this.electselected === this.elect[j].electname) {
-          idelecttemp = [...idelecttemp, this.elect[j]._id];
-          break;
+      for (let i = 0, arri = this.electselected.length; i < arri; ++i) {
+        for (let j = 0, arrj = this.elect.length; j < arrj; ++j) {
+          if (this.electselected[i] === this.elect[j].electname) {
+            idelecttemp = [...idelecttemp, this.elect[j]._id];
+            break;
+          }
         }
       }
       return idelecttemp;
     },
     getIdFromNameofWater() {
       let idwatertemp = [];
-      for (let j = 0, arrj = this.water.length; j < arrj; ++j) {
-        if (this.waterselected === this.water[j].watername) {
-          idwatertemp = [...idwatertemp, this.water[j]._id];
-          break;
+      for (let i = 0, arri = this.electselected.length; i < arri; ++i) {
+        for (let j = 0, arrj = this.water.length; j < arrj; ++j) {
+          if (this.waterselected[i] === this.water[j].watername) {
+            idwatertemp = [...idwatertemp, this.water[j]._id];
+            break;
+          }
         }
       }
       return idwatertemp;
