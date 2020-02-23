@@ -12,6 +12,7 @@
       :title="su_title"
       :text="su_txt"
     />
+
     <v-container class="block-cn" v-animate-css="'fadeIn'">
       <v-row>
         <v-col>
@@ -19,7 +20,7 @@
         </v-col>
       </v-row>
       <SelectContract
-        :contract="contract"
+        :contract="$store.getters.contract"
         @setContractSelect="handleSelectContract"
         v-if="!selected"
       />
@@ -111,8 +112,8 @@ import SelectContract from "./tdComponent/SelectContract";
 import DialogConfirm from "./tdComponent/DialogConfirm";
 
 export default {
-  name: "Electronic",
-  props: ["bill", "contract", "tenant"],
+  name: "Water",
+  props: ["tid"],
   components: {
     SelectContract,
     DialogConfirm
@@ -133,6 +134,8 @@ export default {
         "พฤศจิกายน",
         "ธันวาคม"
       ],
+      contract: [],
+      bill: [],
       unitwater: "",
       contractselect: {},
       wateritems: [],
@@ -158,10 +161,14 @@ export default {
         "เมื่อทำการบันทึกข้อมูลแล้ว จะไม่สามารถดำเนินการแก้ไขหน่วยน้ำประปาได้"
     };
   },
-  mounted() {},
+  mounted() {
+    this.contract = this.$store.getters.contract;
+    this.bill = this.$store.getters.bill;
+  },
   methods: {
     checkPeriod() {
-      let { water: wat } = this.contractselect;
+      let wat = this.$store.getters.water;
+
       let { waterunit, period } = this.billselect;
 
       let fullperiod = period.split("-");
@@ -206,18 +213,23 @@ export default {
           break;
         }
       }
+      this.$store.dispatch("getWaterByContractId", this.contractselect._id);
+
       if (this.bill.length > 0 && this.contractselect !== {}) {
         this.setBillSelect();
       }
+
       if (this.billselect !== {}) {
-        this.initialBill();
+        setTimeout(() => {
+          this.initialBill();
+        }, [500]);
       }
     },
     setBillSelect() {
       let contractid = this.contractselect._id;
       let billtemp = [];
       for (let i = 0, arri = this.bill.length; i < arri; ++i) {
-        if (this.bill[i].contract === contractid) {
+        if (this.bill[i].contract[0] === contractid) {
           billtemp = [...billtemp, this.bill[i]];
         }
       }
@@ -280,13 +292,12 @@ export default {
         waterprice: 0,
         electprice: 0,
         mulct: 0,
-        totalprice: 0,
+        totalprice: parseFloat(this.contractselect.rent),
         paid: 0,
-        tenant: this.tenant._id,
-        contract: this.contractselect._id
+        tenant: [this.tid],
+        contract: [this.contractselect._id]
       };
       this.$store.dispatch("createInitialBill", billdata);
-      this.$store.dispatch("updateTenantWithLastBill", this.tenant._id);
       this.$router.push({ path: "/tenant" });
     },
     handleSubmit(data) {
@@ -301,7 +312,7 @@ export default {
     handleCloseSaveDialog(result) {
       if (result) {
         let waterdata = {};
-        let { water } = this.contractselect;
+        let water = this.$store.getters.water;
         for (let i = 0, arri = water.length; i < arri; ++i) {
           if (water[i].watername === this.waterselected) {
             waterdata._id = water[i]._id;

@@ -19,7 +19,7 @@ export default {
     };
   },
   mounted() {
-    this.initialContract();
+    this.contract && this.initialContract();
   },
   updated(){
       if(this.contractselected){

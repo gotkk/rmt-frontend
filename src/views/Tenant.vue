@@ -34,10 +34,19 @@ export default {
   mounted() {
     this.$store.dispatch("getAllTenant");
   },
+  update(){
+    alert('x')
+    if(!this.add){
+      this.$store.dispatch("getAllTenant");
+    }
+  },
+
   methods: {
     handleCloseOnAdd(){
-      this.add = false;
       this.$store.dispatch("getAllTenant");
+      console.log(this.$store.getters.tenant);
+      this.add = false;
+      this.$forceUpdate();
     },
     handleAdd(){
       this.add = true;

@@ -13,6 +13,17 @@
       :text="su_txt"
     />
 
+    <DialogConfirm
+      :confirm="agreedialog"
+      @colseConfirm="handleCloseAgreeDialog"
+      :title="ag_title"
+      :text="ag_txt"
+    />
+
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+
     <v-container class="block-cn" v-animate-css="'fadeIn'">
       <v-row>
         <v-col>
@@ -20,7 +31,7 @@
         </v-col>
       </v-row>
       <SelectContract
-        :contract="contract"
+        :contract="$store.getters.contract"
         @setContractSelect="handleSelectContract"
         v-if="!selected"
       />
@@ -114,7 +125,7 @@ import DialogConfirm from "./tdComponent/DialogConfirm";
 
 export default {
   name: "Electricity",
-  props: ["bill", "contract", "tenant"],
+  props: ["tid"],
   components: {
     SelectContract,
     DialogConfirm
@@ -135,6 +146,8 @@ export default {
         "พฤศจิกายน",
         "ธันวาคม"
       ],
+      contract: [],
+      bill: [],
       unitelect: "",
       contractselect: {},
       electitems: [],
@@ -145,6 +158,8 @@ export default {
       selected: false,
       billdialog: false,
       savedialog: false,
+      agreedialog: false,
+      loading: false,
       ready: false,
       cancel: false,
       billselect: {},
@@ -157,14 +172,20 @@ export default {
         "นี่เป็นการเริ่มต้นเปิดบิลในรอบเดือนปัจจุบัน เพื่อทำให้สามารถบันทึกข้อมูลไฟฟ้าได้",
       su_title: "ต้องการบันทึกข้อมูลหรือไม่",
       su_txt:
-        "เมื่อทำการบันทึกข้อมูลแล้ว จะไม่สามารถดำเนินการแก้ไขหน่วยไฟฟ้าได้"
+        "เมื่อทำการบันทึกข้อมูลแล้ว จะไม่สามารถดำเนินการแก้ไขหน่วยไฟฟ้าได้",
+      ag_title: "ยืนยันดำเนินการต่อ",
+      ag_txt: ""
     };
   },
-  mounted() {},
+  mounted() {
+    this.contract = this.$store.getters.contract;
+    this.bill = this.$store.getters.bill;
+  },
   updated() {},
   methods: {
     checkPeriod() {
-      let { electricity: etc } = this.contractselect;
+      let etc = this.$store.getters.electricity;
+
       let { electunit, period } = this.billselect;
 
       let fullperiod = period.split("-");
@@ -200,6 +221,14 @@ export default {
         }
       }
     },
+    handleCloseAgreeDialog(result) {
+      if (result) {
+        this.initialBill();
+      } else {
+        this.$router.push({ path: "/tenant" });
+      }
+      this.agreedialog = false;
+    },
     handleSelectContract(value) {
       this.resetData();
       for (let i = 0, arri = this.contract.length; i < arri; ++i) {
@@ -209,18 +238,32 @@ export default {
           break;
         }
       }
+      this.$store.dispatch(
+        "getElectricityByContractId",
+        this.contractselect._id
+      );
+
       if (this.bill.length > 0 && this.contractselect !== {}) {
         this.setBillSelect();
       }
+
       if (this.billselect !== {}) {
-        this.initialBill();
+        // this.agreedialog = true;
+        // this.loading = true;
+        // setTimeout(() => {
+        //   this.loading = false;
+        //   this.initialBill();
+        // }, [2000]);
+        setTimeout(() => {
+          this.initialBill();
+        }, [500]);
       }
     },
     setBillSelect() {
       let contractid = this.contractselect._id;
       let billtemp = [];
       for (let i = 0, arri = this.bill.length; i < arri; ++i) {
-        if (this.bill[i].contract === contractid) {
+        if (this.bill[i].contract[0] === contractid) {
           billtemp = [...billtemp, this.bill[i]];
         }
       }
@@ -283,13 +326,12 @@ export default {
         waterprice: 0,
         electprice: 0,
         mulct: 0,
-        totalprice: 0,
+        totalprice: parseFloat(this.contractselect.rent),
         paid: 0,
-        tenant: this.tenant._id,
-        contract: this.contractselect._id
+        tenant: [this.tid],
+        contract: [this.contractselect._id]
       };
       this.$store.dispatch("createInitialBill", billdata);
-      this.$store.dispatch("updateTenantWithLastBill", this.tenant._id);
       this.$router.push({ path: "/tenant" });
     },
     handleSubmit(data) {
@@ -304,7 +346,7 @@ export default {
     handleCloseSaveDialog(result) {
       if (result) {
         let electdata = {};
-        let { electricity } = this.contractselect;
+        let electricity = this.$store.getters.electricity;
         for (let i = 0, arri = electricity.length; i < arri; ++i) {
           if (electricity[i].electname === this.electselected) {
             electdata._id = electricity[i]._id;

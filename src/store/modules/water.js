@@ -48,6 +48,15 @@ const actions = {
                 console.log(err);
             })
     },
+    getWaterByContractId({ commit }, id) {
+        axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}water/${id}`)
+            .then(res => {
+                commit("setWater", res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
 }
 
 export default {

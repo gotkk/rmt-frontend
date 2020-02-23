@@ -7,7 +7,7 @@
         </v-col>
       </v-row>
       <SelectContract
-        :contract="contract"
+        :contract="$store.getters.contract"
         @setContractSelect="handleSelectContract"
         v-if="!ctselected"
       />
@@ -23,7 +23,7 @@
         <SelectBill
           :billlist="billlist"
           @setBillSelect="handleSelectBill"
-          @setNotReady="hamdleSelectNotReady"
+          @setNotReady="handleSelectNotReady"
           v-if="ctselected&&!blselected"
         />
       </div>
@@ -209,7 +209,7 @@ import SelectBill from "./tdComponent/SelectBill";
 
 export default {
   name: "RentDetail",
-  props: ["bill", "contract", "tenant"],
+  props: ["tid"],
   components: {
     SelectContract,
     SelectBill
@@ -228,8 +228,10 @@ export default {
         "กันยายน",
         "ตุลาคม",
         "พฤศจิกายน",
-        "ธันวาคม"
+        "ธันวาคม",
+        "-"
       ],
+      contract: [],
       contractselect: {},
       billselect: {},
       preventbill: {},
@@ -241,6 +243,7 @@ export default {
       notuseelect: false,
       notusewater: false,
       period: "period",
+      bill: [],
       billlist: [],
       selectunit: [],
       swaterunit: [],
@@ -253,19 +256,20 @@ export default {
       totalallprice: 0,
       rental: 0,
       mulct: 0,
-      indexmonth: 0
+      indexmonth: 12
     };
   },
-  mounted() {},
+  mounted() {
+    this.contract = this.$store.getters.contract;
+    this.bill = this.$store.getters.bill;
+  },
   updated() {},
   methods: {
     checkReady() {
-      let {
-        electunit,
-        waterunit,
-        billstatus,
-      } = this.billselect;
-      let { electricity, water } = this.contractselect;
+      // let { electunit, waterunit, billstatus } = this.billselect;
+      let { electunit, waterunit } = this.billselect;
+      let electricity = this.$store.getters.electricity;
+      let water = this.$store.getters.water;
       let eready = false;
       let wready = false;
       this.period = this.billselect.period;
@@ -275,32 +279,33 @@ export default {
       // let year = date.getFullYear();
       // this.period = month + " " + year;
       // if (mindex === bmonth && year === byear) {
-      if (billstatus === "paid") {
-        this.paid = true;
-      } else {
-        if (electricity.length !== 0) {
-          if (electunit.length === electricity.length) {
-            eready = true;
-          }
-        } else {
-          this.notuseelect = true;
+
+      // if (billstatus === "paid") {
+      //   this.paid = true;
+      // } else {
+      if (electricity.length !== 0) {
+        if (electunit.length === electricity.length) {
           eready = true;
         }
+      } else {
+        this.notuseelect = true;
+        eready = true;
+      }
 
-        if (water.length !== 0) {
-          if (waterunit.length === water.length) {
-            wready = true;
-          }
-        } else {
-          this.notusewater = true;
+      if (water.length !== 0) {
+        if (waterunit.length === water.length) {
           wready = true;
         }
-        if (eready && wready) {
-          this.ready = true;
-        } else {
-          this.ready = false;
-        }
+      } else {
+        this.notusewater = true;
+        wready = true;
       }
+      if (eready && wready) {
+        this.ready = true;
+      } else {
+        this.ready = false;
+      }
+      // }
       // }
     },
     handleSelectContract(value) {
@@ -312,6 +317,11 @@ export default {
           break;
         }
       }
+      this.$store.dispatch(
+        "getElectricityByContractId",
+        this.contractselect._id
+      );
+      this.$store.dispatch("getWaterByContractId", this.contractselect._id);
       if (this.bill.length > 0 && this.contractselect !== {}) {
         this.setBill();
       }
@@ -335,7 +345,7 @@ export default {
         this.calculateTotalRent();
       }
     },
-    hamdleSelectNotReady() {
+    handleSelectNotReady() {
       this.blselected = true;
       this.ready = false;
     },
@@ -357,20 +367,15 @@ export default {
       }
     },
     calculateTotalRent() {
-      for (
-        let i = 0, arri = this.contractselect.electricity.length;
-        i < arri;
-        ++i
-      ) {
+      let electricity = this.$store.getters.electricity;
+      let water = this.$store.getters.water;
+      for (let i = 0, arri = electricity.length; i < arri; ++i) {
         for (
           let j = 0, arrj = this.preventbill.electunit.length;
           j < arrj;
           ++j
         ) {
-          if (
-            this.contractselect.electricity[i]._id ===
-            this.preventbill.electunit[j]._id
-          ) {
+          if (electricity[i]._id === this.preventbill.electunit[j]._id) {
             for (
               let k = 0, arrk = this.billselect.electunit.length;
               k < arrk;
@@ -381,15 +386,15 @@ export default {
                 this.billselect.electunit[k]._id
               ) {
                 let data = {
-                  name: this.contractselect.electricity[i].electname,
+                  name: electricity[i].electname,
                   unit:
                     this.billselect.electunit[k].value -
                     this.preventbill.electunit[j].value,
-                  ppunit: this.contractselect.electricity[i].electppunit,
+                  ppunit: electricity[i].electppunit,
                   total:
                     (this.billselect.electunit[k].value -
                       this.preventbill.electunit[j].value) *
-                    this.contractselect.electricity[i].electppunit
+                    electricity[i].electppunit
                 };
                 this.sumelectprice = this.sumelectprice + data.total;
                 this.electcalcurate = [...this.electcalcurate, data];
@@ -401,16 +406,13 @@ export default {
         }
       }
 
-      for (let i = 0, arri = this.contractselect.water.length; i < arri; ++i) {
+      for (let i = 0, arri = water.length; i < arri; ++i) {
         for (
           let j = 0, arrj = this.preventbill.waterunit.length;
           j < arrj;
           ++j
         ) {
-          if (
-            this.contractselect.water[i]._id ===
-            this.preventbill.waterunit[j]._id
-          ) {
+          if (water[i]._id === this.preventbill.waterunit[j]._id) {
             for (
               let k = 0, arrk = this.billselect.waterunit.length;
               k < arrk;
@@ -421,15 +423,15 @@ export default {
                 this.billselect.waterunit[k]._id
               ) {
                 let data = {
-                  name: this.contractselect.water[i].watername,
+                  name: water[i].watername,
                   unit:
                     this.billselect.waterunit[k].value -
                     this.preventbill.waterunit[j].value,
-                  ppunit: this.contractselect.water[i].waterppunit,
+                  ppunit: water[i].waterppunit,
                   total:
                     (this.billselect.waterunit[k].value -
                       this.preventbill.waterunit[j].value) *
-                    this.contractselect.water[i].waterppunit
+                    water[i].waterppunit
                 };
                 this.sumwaterprice = this.sumwaterprice + data.total;
                 this.watercalculate = [...this.watercalculate, data];
@@ -453,14 +455,14 @@ export default {
       let billlistall = [];
       for (let i = 0, arri = this.bill.length; i < arri; ++i) {
         if (
-          this.bill[i].contract === contractid &&
+          this.bill[i].contract[0] === contractid &&
           (this.bill[i].billstatus === "notpaid" ||
             this.bill[i].billstatus === "installment")
         ) {
           this.billlist = [...this.billlist, this.bill[i]];
         }
         if (
-          this.bill[i].contract === contractid &&
+          this.bill[i].contract[0] === contractid &&
           this.bill[i].billstatus === "paid"
         ) {
           billlistall = [...billlistall, this.bill[i]];
@@ -483,6 +485,7 @@ export default {
       this.sumelectprice = 0;
       this.sumwaterprice = 0;
       this.totalallprice = 0;
+      this.indexmonth = 12;
       this.rental = 0;
       this.mulct = 0;
       this.notuseelect = false;

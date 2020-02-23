@@ -1,27 +1,11 @@
 <template>
   <div id="tenantdetail">
     <MnTenantDetail @onSelect="handleSelectTenant" :active="menuactive" />
-    <Personalinfo v-if="menuactive===0" :personinfo="tenant" />
-    <Contract v-else-if="menuactive===1" :contract="tenant.contract" />
-    <RentDetail
-      v-else-if="menuactive===2"
-      :bill="tenant.bill"
-      :contract="tenant.contract"
-      :tenant="tenant"
-    />
-    <Electricity
-      v-else-if="menuactive===3"
-      :contract="tenant.contract"
-      :bill="tenant.bill"
-      :tenant="tenant"
-    />
-    <Water
-      v-else-if="menuactive===4"
-      :contract="tenant.contract"
-      :water="tenant.contract[0].water"
-      :bill="tenant.bill"
-      :tenant="tenant"
-    />
+    <Personalinfo v-if="menuactive===0" :personinfo="tenant" :tid="tenant._id" />
+    <Contract v-else-if="menuactive===1" :tid="tenant._id" />
+    <RentDetail v-else-if="menuactive===2" :tid="tenant._id" />
+    <Electricity v-else-if="menuactive===3" :tid="tenant._id" />
+    <Water v-else-if="menuactive===4" :tid="tenant._id" />
   </div>
 </template>
 

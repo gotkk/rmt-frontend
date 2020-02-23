@@ -47,7 +47,16 @@ const actions = {
             .catch(err => {
                 console.log(err);
             })
-    }
+    },
+    getContractByTenantId({ commit }, id) {
+        axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}contract/${id}`)
+            .then(res => {
+                commit("setContract", res.data)
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
 }
 
 export default {

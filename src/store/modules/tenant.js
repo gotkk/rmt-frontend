@@ -12,9 +12,6 @@ const mutations = {
     setTenant(state, tenant) {
         state.tenant = tenant.result;
     },
-    setCreate() {
-
-    },
     setUpdate() {
 
     }
@@ -23,8 +20,14 @@ const mutations = {
 const actions = {
     createTenant({ commit }, data) {
         axios.post(`${process.env.VUE_APP_RWT_BACKEND_APP}tenant`, data)
-            .then(res => {
-                commit("setCreate", res.data);
+            .then(() => {
+                axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}tenant`)
+                    .then(res => {
+                        commit("setTenant", res.data)
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
             })
             .catch(err => {
                 console.log(err);
@@ -50,8 +53,14 @@ const actions = {
     },
     updateTenant({ commit }, data) {
         axios.put(`${process.env.VUE_APP_RWT_BACKEND_APP}tenant/${data._id}`, data)
-            .then(res => {
-                commit("setUpdate", res.data)
+            .then(() => {
+                axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}tenant`)
+                .then(res => {
+                    commit("setTenant", res.data)
+                })
+                .catch(err => {
+                    console.log(err);
+                })
             })
             .catch(err => {
                 console.log(err);

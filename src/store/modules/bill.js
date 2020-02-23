@@ -2,7 +2,7 @@ const axios = require('axios');
 
 const state = {
     bill: "",
-    billId: "ss"
+    billId: ""
 }
 
 const getters = {
@@ -49,7 +49,16 @@ const actions = {
             .catch(err => {
                 console.log(err);
             })
-    }
+    },
+    getBillByTenantId({ commit }, id) {
+        axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}bill/${id}`)
+            .then(res => {
+                commit("setBill", res.data)
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
 }
 
 export default {

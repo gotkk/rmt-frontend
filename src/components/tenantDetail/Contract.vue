@@ -7,7 +7,7 @@
         </v-col>
       </v-row>
       <SelectContract
-        :contract="contract"
+        :contract="$store.getters.contract"
         @setContractSelect="handleSelectContract"
         v-if="!selected"
       />
@@ -87,17 +87,22 @@
 import SelectContract from "./tdComponent/SelectContract";
 export default {
   name: "Contract",
-  props: ["contract"],
+  props: ["tid"],
   components: {
     SelectContract
   },
   data() {
     return {
+      contract: [],
       contractselect: {},
-      selected: false
+      selected: false,
+      inited: false
     };
   },
-  mounted() {},
+  mounted() {
+    this.$store.dispatch("getContractByTenantId", this.tid);
+    this.contract = this.$store.getters.contract;
+  },
   methods: {
     handleSelectContract(value) {
       for (let i = 0, arri = this.contract.length; i < arri; ++i) {

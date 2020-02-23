@@ -49,19 +49,6 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-            <v-row>
-              <v-col>
-                <v-select
-                  v-model="contractselected"
-                  :items="contractitems"
-                  multiple
-                  label="เลือกสัญญาเช่า"
-                  color="light-blue darken-2"
-                  :rules="contractrule"
-                  ref="selectcontract"
-                ></v-select>
-              </v-col>
-            </v-row>
           </v-container>
         </v-card-text>
         <v-card-actions>
@@ -87,51 +74,17 @@ export default {
       c_title: "ต้องการเพิ่มข้อมูลผู้เช่าหรือไม่",
       c_txt: "นี่เป็นบันทึกข้อมูลผู้เช่า เมื่อเพิ่มแล้วจะไม่สามารถลบได้",
       datarule: [value => !!value || "กรุณากรอกข้อมูล"],
-      contractrule: [value => !!value || "กรุณาเลือกข้อมูล"],
       personalform: {},
       data_add: {},
-      contractselected: [],
-      contractitems: [],
-      contract: [],
       confirm: false,
-      inited: false
     };
   },
   mounted() {
     this.$store.dispatch("getAllContract");
   },
   updated() {
-    if (!this.inited) {
-      this.initialForm();
-    }
   },
   methods: {
-    initialForm() {
-      for (
-        let i = 0, arri = this.$store.getters.contract.length;
-        i < arri;
-        ++i
-      ) {
-        this.contractitems = [
-          ...this.contractitems,
-          this.$store.getters.contract[i].name
-        ];
-      }
-      this.contract = this.$store.getters.contract;
-      this.inited = true;
-    },
-    getIdFromNameofContract() {
-      let idcontracttemp = [];
-      for (let i = 0, arri = this.contractselected.length; i < arri; ++i) {
-        for (let j = 0, arrj = this.contract.length; j < arrj; ++j) {
-          if (this.contractselected[i] === this.contract[j].name) {
-            idcontracttemp = [...idcontracttemp, this.contract[j]._id];
-            break;
-          }
-        }
-      }
-      return idcontracttemp;
-    },
     validateData(data) {
       if (!data.firstname) {
         this.$refs["fname"].focus();
@@ -150,7 +103,6 @@ export default {
       }
     },
     preSubmitAdd() {
-      let newcontract = this.getIdFromNameofContract();
       let newtel =
         this.personalform.tel &&
         this.personalform.tel
@@ -159,9 +111,7 @@ export default {
           .map(item => item.trim());
       let data_add = {
         ...this.personalform,
-        contract: newcontract,
-        tel: newtel,
-        bill: []
+        tel: newtel
       };
       this.validateData(data_add)
         ? this.checkConfirm(data_add)

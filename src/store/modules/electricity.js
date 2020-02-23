@@ -48,6 +48,17 @@ const actions = {
                 console.log(err);
             })
     },
+    getElectricityByContractId({ commit }, id) {
+        console.log(`${process.env.VUE_APP_RWT_BACKEND_APP}electricity/${id}`);
+        axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}electricity/${id}`)
+            .then(res => {
+                commit("setElectricity", res.data);
+                // return res;
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
 }
 
 export default {
