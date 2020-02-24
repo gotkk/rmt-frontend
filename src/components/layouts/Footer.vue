@@ -1,14 +1,23 @@
 <template>
   <v-footer>
-    <span>&copy; 2019</span>
+    <div class="block-footer">
+      <span>Power by Got Bunmak</span>
+    </div>
   </v-footer>
 </template>
 
 <script>
 export default {
-    name: "Footer"
+  name: "Footer"
 };
 </script>
 
-<style>
+<style scoped>
+.block-footer{
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 </style>
