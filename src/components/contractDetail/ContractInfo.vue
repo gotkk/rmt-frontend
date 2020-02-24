@@ -119,7 +119,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="6">
+          <v-col cols="12">
             <v-select
               v-model="tenantselected"
               :items="tenantitems"
@@ -127,40 +127,6 @@
               color="light-blue darken-2"
               :disabled="disabled.tenant"
               ref="tenant"
-            ></v-select>
-          </v-col>
-          <v-col cols="6">
-            <v-select
-              v-model="landselected"
-              :items="landitems"
-              label="เลือกที่ดิน"
-              color="light-blue darken-2"
-              :disabled="disabled.land"
-              ref="land"
-            ></v-select>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="6">
-            <v-select
-              v-model="electselected"
-              :items="electitems"
-              multiple
-              label="เลือกหม้อไฟฟ้า"
-              color="light-blue darken-2"
-              :disabled="disabled.elect"
-              ref="elect"
-            ></v-select>
-          </v-col>
-          <v-col cols="6">
-            <v-select
-              v-model="waterselected"
-              :items="wateritems"
-              multiple
-              label="เลือกหม้อน้ำประปา"
-              color="light-blue darken-2"
-              :disabled="disabled.water"
-              ref="water"
             ></v-select>
           </v-col>
         </v-row>
@@ -195,15 +161,6 @@ export default {
       tenantselected: "",
       tenantitems: [],
       tenant: [],
-      landselected: "",
-      landitems: [],
-      land: [],
-      electselected: [],
-      electitems: [],
-      elect: [],
-      waterselected: [],
-      wateritems: [],
-      water: [],
       startdate: new Date().toISOString().substr(0, 10),
       startmodal: false,
       enddate: new Date().toISOString().substr(0, 10),
@@ -224,18 +181,12 @@ export default {
         end: true,
         status: true,
         tenant: true,
-        land: true,
-        elect: true,
-        water: true,
         inited: false
       }
     };
   },
   mounted() {
     this.$store.dispatch("getAllTenant");
-    this.$store.dispatch("getAllLand");
-    this.$store.dispatch("getAllElectricity");
-    this.$store.dispatch("getAllWater");
   },
   updated() {
     if (!this.inited) {
@@ -245,36 +196,17 @@ export default {
   methods: {
     initialForm() {
       this.tenant = this.$store.getters.tenant;
-      this.land = this.$store.getters.land;
-      this.elect = this.$store.getters.electricity;
-      this.water = this.$store.getters.water;
       for (let i = 0, arri = this.tenant.length; i < arri; ++i) {
         this.tenantitems = [
           ...this.tenantitems,
           `${this.tenant[i].firstname}-${this.tenant[i].lastname}`
         ];
       }
-      for (let i = 0, arri = this.land.length; i < arri; ++i) {
-        this.landitems = [...this.landitems, this.land[i].landname];
-      }
-      for (let i = 0, arri = this.elect.length; i < arri; ++i) {
-        this.electitems = [...this.electitems, this.elect[i].electname];
-      }
-      for (let i = 0, arri = this.water.length; i < arri; ++i) {
-        this.wateritems = [...this.wateritems, this.water[i].watername];
-      }
-      let { tenant, land, electricity, water } = this.contractinfo;
+      let { tenant} = this.contractinfo;
       this.tenantselected =
         tenant.length !== 0
           ? `${tenant[0].firstname}-${tenant[0].lastname}`
           : "";
-      this.landselected = land.length !== 0 ? land[0].landname : "";
-      for (let i = 0, arri = electricity.length; i < arri; ++i) {
-        this.electselected = [...this.electselected, electricity[i].electname];
-      }
-      for (let i = 0, arri = water.length; i < arri; ++i) {
-        this.waterselected = [...this.waterselected, water[i].watername];
-      }
       this.contract_update = { ...this.contractinfo };
       this.inited = true;
     },
@@ -313,36 +245,6 @@ export default {
       }
       return idtenanttemp;
     },
-    getIdFromNameofLand() {
-      let idlandtemp = [];
-      for (let j = 0, arrj = this.land.length; j < arrj; ++j) {
-        if (this.landselected === this.land[j].landname) {
-          idlandtemp = [...idlandtemp, this.land[j]._id];
-          break;
-        }
-      }
-      return idlandtemp;
-    },
-    getIdFromNameofElectricity() {
-      let idelecttemp = [];
-      for (let j = 0, arrj = this.elect.length; j < arrj; ++j) {
-        if (this.electselected === this.elect[j].electname) {
-          idelecttemp = [...idelecttemp, this.elect[j]._id];
-          break;
-        }
-      }
-      return idelecttemp;
-    },
-    getIdFromNameofWater() {
-      let idwatertemp = [];
-      for (let j = 0, arrj = this.water.length; j < arrj; ++j) {
-        if (this.waterselected === this.water[j].watername) {
-          idwatertemp = [...idwatertemp, this.water[j]._id];
-          break;
-        }
-      }
-      return idwatertemp;
-    },
     validateData(data) {
       if (!data.name) {
         this.$refs["name"].focus();
@@ -362,19 +264,13 @@ export default {
     },
     preSubmitUpdate() {
       let newtenant = this.tenantselected ? this.getIdFromNameofTenant() : [];
-      let newland = this.getIdFromNameofLand();
-      let newelect = this.getIdFromNameofElectricity();
-      let newwater = this.getIdFromNameofWater();
       let newdeposit = parseFloat(this.contract_update.deposit);
       let newrent = parseFloat(this.contract_update.rent);
       this.contract_update = {
         ...this.contract_update,
         deposit: newdeposit,
         rent: newrent,
-        tenant: newtenant,
-        land: newland,
-        electricity: newelect,
-        water: newwater
+        tenant: newtenant
       };
       this.validateData(this.contract_update)
         ? (this.confirm2 = true)

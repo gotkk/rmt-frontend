@@ -151,7 +151,7 @@ export default {
     preSubmitAdd() {
       let newcontract = this.getIdFromNameofContract();
       let newland = this.getIdFromNameofLand();
-      let newppunit = parseFloat(this.waterform.waterppunit)
+      let newppunit = parseFloat(this.waterform.waterppunit);
       let data_add = {
         ...this.waterform,
         waterstatus: this.waterstatus,
@@ -176,6 +176,10 @@ export default {
       this.handleCloseDialog();
     },
     handleCloseDialog() {
+      this.waterform = {};
+      this.contractselected = {};
+      this.landselected = {};
+      this.waterstatus = false;
       this.$emit("colseAdd");
     }
   }

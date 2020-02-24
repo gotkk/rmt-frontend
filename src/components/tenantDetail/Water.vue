@@ -222,7 +222,7 @@ export default {
       if (this.billselect !== {}) {
         setTimeout(() => {
           this.initialBill();
-        }, [500]);
+        }, [1000]);
       }
     },
     setBillSelect() {

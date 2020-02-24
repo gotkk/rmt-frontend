@@ -9,7 +9,7 @@
     <v-dialog v-model="add" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <span class="headline">User Profile</span>
+          <span class="headline">เพิ่มไฟฟ้า</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -178,6 +178,10 @@ export default {
       this.handleCloseDialog();
     },
     handleCloseDialog() {
+      this.electform = {};
+      this.contractselected = {};
+      this.landselected = {};
+      this.electstatus = false;
       this.$emit("colseAdd");
     }
   }

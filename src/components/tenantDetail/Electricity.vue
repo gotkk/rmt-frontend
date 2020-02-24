@@ -256,7 +256,7 @@ export default {
         // }, [2000]);
         setTimeout(() => {
           this.initialBill();
-        }, [500]);
+        }, [1000]);
       }
     },
     setBillSelect() {
@@ -356,7 +356,7 @@ export default {
         electdata.value = parseFloat(this.unitelect);
         let billdata = {
           ...this.billselect,
-          electunit: [{ ...electdata }]
+          electunit: [...this.billselect.electunit, { ...electdata }]
         };
         this.handleSubmit(billdata);
       }

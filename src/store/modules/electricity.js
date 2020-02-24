@@ -9,47 +9,52 @@ const getters = {
 }
 
 const mutations = {
-    setElectricity(state, electricity){
+    setElectricity(state, electricity) {
         state.electricity = electricity.result;
-    },
-    setCreate(){
-        
-    },
-    setUpdate(){
-
     }
 }
 
 const actions = {
     createElectricity({ commit }, data) {
         axios.post(`${process.env.VUE_APP_RWT_BACKEND_APP}electricity`, data)
-            .then(res => {
-                commit("setCreate", res.data);
+            .then(() => {
+                axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}electricity`)
+                    .then(res => {
+                        commit("setElectricity", res.data)
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
             })
             .catch(err => {
                 console.log(err);
             })
     },
-    getAllElectricity({commit}){
+    getAllElectricity({ commit }) {
         axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}electricity`)
-        .then(res => {
-            commit("setElectricity", res.data)
-        })
-        .catch(err => {
-            console.log(err);
-        })
+            .then(res => {
+                commit("setElectricity", res.data)
+            })
+            .catch(err => {
+                console.log(err);
+            })
     },
     updateElectricity({ commit }, data) {
         axios.put(`${process.env.VUE_APP_RWT_BACKEND_APP}electricity/${data._id}`, data)
-            .then(res => {
-                commit("setUpdate", res.data);
+            .then(() => {
+                axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}electricity`)
+                    .then(res => {
+                        commit("setElectricity", res.data)
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
             })
             .catch(err => {
                 console.log(err);
             })
     },
     getElectricityByContractId({ commit }, id) {
-        console.log(`${process.env.VUE_APP_RWT_BACKEND_APP}electricity/${id}`);
         axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}electricity/${id}`)
             .then(res => {
                 commit("setElectricity", res.data);

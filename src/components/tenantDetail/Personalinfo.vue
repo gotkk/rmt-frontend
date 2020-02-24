@@ -91,11 +91,11 @@ export default {
       initial: false,
       updating: false,
       confirm: false,
-      c_title: "ต้องการแก้ไขข้อมูลไฟฟ้า",
-      c_txt: "แก้ไขข้อมูลไฟฟ้า",
+      c_title: "ต้องการแก้ไขข้อมูลผู้เช่า",
+      c_txt: "แก้ไขข้อมูลผู้เช่า",
       confirm2: false,
-      c_title2: "ต้องการบันทึกข้อมูลไฟฟ้า",
-      c_txt2: "บันทึกข้อมูลการแก้ไขไฟฟ้า",
+      c_title2: "ต้องการบันทึกข้อมูลผู้เช่า",
+      c_txt2: "บันทึกข้อมูลการแก้ไขผู้เช่า",
       disabled: {
         fname: true,
         lname: true,
@@ -109,7 +109,7 @@ export default {
     DialogConfirm
   },
   mounted() {
-    console.log(this.personinfo);
+    this.personalform = { ...this.personinfo };
   },
   updated() {
     if (!this.initial) {

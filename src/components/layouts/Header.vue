@@ -27,7 +27,6 @@
 </template>
 
 <script>
-
 export default {
   props: {
     source: String
@@ -57,14 +56,14 @@ export default {
       //   title: "การจัดการ"
       // },
       {
-        path: "/contract",
-        icon: "mdi-clipboard-text",
-        title: "สัญญาเช่า"
-      },
-      {
         path: "/land",
         icon: "mdi-google-maps",
         title: "ที่ดิน"
+      },
+      {
+        path: "/contract",
+        icon: "mdi-clipboard-text",
+        title: "สัญญาเช่า"
       },
       {
         path: "/electricity",

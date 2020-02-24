@@ -42,6 +42,15 @@ const actions = {
                 console.log(err);
             })
     },
+    getNewTenantNotHaveBill({ commit }) {
+        axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}tenant/new`)
+            .then(res => {
+                commit("setTenant", res.data)
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
     updateTenantWithLastBill({ commit }, tenantid) {
         axios.put(`${process.env.VUE_APP_RWT_BACKEND_APP}tenant/${tenantid}/lastbill`)
             .then(res => {

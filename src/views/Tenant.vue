@@ -44,9 +44,7 @@ export default {
   methods: {
     handleCloseOnAdd(){
       this.$store.dispatch("getAllTenant");
-      console.log(this.$store.getters.tenant);
       this.add = false;
-      this.$forceUpdate();
     },
     handleAdd(){
       this.add = true;

@@ -11,20 +11,20 @@ const getters = {
 const mutations = {
     setContract(state, contract) {
         state.contract = contract.result;
-    },
-    setCreate(){
-
-    },
-    setUpdate(){
-
     }
 }
 
 const actions = {
     createContract({ commit }, data) {
         axios.post(`${process.env.VUE_APP_RWT_BACKEND_APP}contract`, data)
-            .then(res => {
-                commit("setCreate", res.data);
+            .then(() => {
+                axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}contract`)
+                .then(res => {
+                    commit("setContract", res.data)
+                })
+                .catch(err => {
+                    console.log(err);
+                })
             })
             .catch(err => {
                 console.log(err);
@@ -32,8 +32,14 @@ const actions = {
     },
     updateContract({ commit }, data) {
         axios.put(`${process.env.VUE_APP_RWT_BACKEND_APP}contract/${data._id}`, data)
-            .then(res => {
-                commit("setUpdate", res.data);
+            .then(() => {
+                axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}contract`)
+                .then(res => {
+                    commit("setContract", res.data)
+                })
+                .catch(err => {
+                    console.log(err);
+                })
             })
             .catch(err => {
                 console.log(err);
@@ -42,6 +48,16 @@ const actions = {
     getAllContract({ commit }) {
         axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}contract`)
             .then(res => {
+                commit("setContract", res.data)
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
+    getNewContractNotHaveBill({ commit }) {
+        axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}contract/new`)
+            .then(res => {
+                console.log(res.data);
                 commit("setContract", res.data)
             })
             .catch(err => {

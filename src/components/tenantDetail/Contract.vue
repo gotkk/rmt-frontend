@@ -42,11 +42,8 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="6">
+          <v-col cols="12">
             <v-text-field v-model="contractselect.name" label="ชื่อสัญญาเช่า" disabled></v-text-field>
-          </v-col>
-          <v-col cols="6">
-            <v-text-field v-model="contractselect.duration" label="ระยะเวลาเช่า (ปี)" disabled></v-text-field>
           </v-col>
         </v-row>
         <v-row>
@@ -70,14 +67,14 @@
             <v-text-field v-model="contractselect.rent" label="ค่าเช่า" disabled></v-text-field>
           </v-col>
         </v-row>
-        <v-row>
+        <!-- <v-row>
           <v-col cols="12 text-right">
             <v-btn color="green accent-4">
               <v-icon>mdi-pencil-circle-outline</v-icon>
               <span>แก้ไข</span>
             </v-btn>
           </v-col>
-        </v-row>
+        </v-row> -->
       </v-container>
     </v-form>
   </div>

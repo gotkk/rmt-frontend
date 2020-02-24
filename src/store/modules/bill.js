@@ -14,10 +14,10 @@ const mutations = {
     setBillId(state, bill) {
         state.billId = bill.result._id;
     },
-    setUpdateBillUnit(){
+    setUpdateBillUnit() {
 
     },
-    setBill(state, bill){
+    setBill(state, bill) {
         state.bill = bill.result
     }
 }
@@ -27,6 +27,21 @@ const actions = {
         axios.post(`${process.env.VUE_APP_RWT_BACKEND_APP}bill/initialbill`, billdata)
             .then(res => {
                 commit("setBillId", res.data)
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
+    createNewBill({ commit }, billdata) {
+        axios.post(`${process.env.VUE_APP_RWT_BACKEND_APP}bill/initialbill`, billdata)
+            .then(() => {
+                axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}bill`)
+                    .then(res => {
+                        commit("setBill", res.data)
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
             })
             .catch(err => {
                 console.log(err);
@@ -52,6 +67,15 @@ const actions = {
     },
     getBillByTenantId({ commit }, id) {
         axios.get(`${process.env.VUE_APP_RWT_BACKEND_APP}bill/${id}`)
+            .then(res => {
+                commit("setBill", res.data)
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    },
+    updateBillStatusPaid({ commit }, data) {
+        axios.put(`${process.env.VUE_APP_RWT_BACKEND_APP}bill/${data._id}`, data)
             .then(res => {
                 commit("setBill", res.data)
             })

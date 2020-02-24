@@ -1,5 +1,11 @@
 <template>
   <div>
+    <DialogConfirm
+      :confirm="confirm"
+      @colseConfirm="handleResConfirm"
+      :title="c_title"
+      :text="c_txt"
+    />
     <v-container class="block-cn" v-animate-css="'fadeIn'">
       <v-row>
         <v-col>
@@ -195,7 +201,7 @@
         <hr />
         <v-row>
           <v-col class="d-flex justify-center">
-            <v-btn>ชำระค่าเช่า</v-btn>
+            <v-btn @click="confirm=true">ชำระค่าเช่า</v-btn>
           </v-col>
         </v-row>
       </div>
@@ -206,12 +212,14 @@
 <script>
 import SelectContract from "./tdComponent/SelectContract";
 import SelectBill from "./tdComponent/SelectBill";
+import DialogConfirm from "../tenantDetail/tdComponent/DialogConfirm";
 
 export default {
   name: "RentDetail",
   props: ["tid"],
   components: {
     SelectContract,
+    DialogConfirm,
     SelectBill
   },
   data() {
@@ -242,6 +250,7 @@ export default {
       notuse: false,
       notuseelect: false,
       notusewater: false,
+      confirm: false,
       period: "period",
       bill: [],
       billlist: [],
@@ -256,7 +265,9 @@ export default {
       totalallprice: 0,
       rental: 0,
       mulct: 0,
-      indexmonth: 12
+      indexmonth: 12,
+      c_title: "ต้องการบันทึกได้รับค่าเช่าแล้ว",
+      c_txt: "บันทึกข้อมูล ได้รับค่าเช่าจากผู้เช่าคนนี้เรียบร้อยแล้ว"
     };
   },
   mounted() {
@@ -469,6 +480,24 @@ export default {
         }
       }
       this.preventbill = billlistall[billlistall.length - 1];
+      let date = new Date();
+      let period = `${date.getFullYear()}-${date.getMonth()}`
+      if(period === this.preventbill.period){
+        this.paid = true;
+        this.indexmonth = date.getMonth();
+      }
+    },
+    handlePaid() {
+      let billdata = {
+        ...this.billselect,
+        billstatus: "paid"
+      };
+      this.$store.dispatch("updateBillStatusPaid", billdata);
+      this.$router.push({path: '/tenant'});
+    },
+    handleResConfirm(result) {
+      result ? this.handlePaid() : (this.confirm = false);
+      this.confirm = false;
     },
     resetData() {
       this.electcalcurate = [];

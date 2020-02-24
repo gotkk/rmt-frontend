@@ -80,7 +80,6 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("getAllContract");
   },
   updated() {
   },
@@ -130,6 +129,7 @@ export default {
       this.handleCloseDialog();
     },
     handleCloseDialog() {
+      this.personalform= {}
       this.$emit("colseAdd");
     }
   }

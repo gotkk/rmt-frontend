@@ -1,7 +1,9 @@
 <template>
   <v-card v-animate-css="'fadeIn'">
     <v-card-title>
-      ใบเสร็จค่าเช่า
+      <v-btn rounded color="primary" dark @click="handleAdd()">
+        <v-icon>mdi-plus-circle</v-icon>กำหนดใบเสร็จเริ่มต้นผู้เช่าใหม่
+      </v-btn>
       <v-spacer></v-spacer>
       <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
     </v-card-title>
@@ -32,9 +34,10 @@ export default {
       selected: [],
       search: "",
       headers: [
-        { text: "รหัสใบเสร็จ", value: "_id" },
-        { text: "ชื่อผู้เช่า", value: "tenant.firstname" },
-        { text: "รอบใบเสร็จ", value: "month" },
+        { text: "รอบใบเสร็จ", value: "period" },
+        { text: "ชื่อผู้เช่า", value: "tenant[0].firstname" },
+        { text: "นามสกุลผู้เช่า", value: "tenant[0].lastname" },
+        { text: "ชื่อเล่นผู้เช่า", value: "tenant[0].nickname" },
         { text: "ค่าเช่า", value: "rent" },
         { text: "ค่าไฟฟ้า", value: "electprice" },
         { text: "ค่าน้ำประปา", value: "waterprice" },
@@ -47,7 +50,12 @@ export default {
   },
   methods: {
     handleSelect(data) {
-      this.$router.push({ path: `/bill/${data._id}` });
+      // this.$router.push({ path: `/bill/${data._id}` });
+      console.log(data);
+      alert('this feature is comming soon!')
+    },
+    handleAdd(){
+      this.$emit("handleAdd");
     }
   }
 };
